@@ -6,28 +6,32 @@
 
   outputs = inputs:
     let
-      overlay = final: prev: { };
+      overlay = final: prev:
+        {
+          wait-for-it = prev.callPackage ./nix/wait-for-it { };
+
+          my-ruby = prev.ruby_3_2;
+
+          app-env = prev.buildEnv {
+            name = "app-env";
+            paths = with final; [
+              wait-for-it
+
+              nodejs-18_x
+              yarn
+              purescript
+              spago
+
+              my-ruby
+
+              postgresql
+            ];
+          };
+        };
+
       perSystem = system:
         let
           pkgs = import inputs.nixpkgs { inherit system; overlays = [ overlay ]; };
-
-          wait-for-it = pkgs.callPackage ./nix/wait-for-it { };
-
-          my-ruby = pkgs.ruby_3_2;
-
-          app-env = with pkgs; [
-            wait-for-it
-
-            nodejs-18_x
-            yarn
-            purescript
-            spago
-
-            my-ruby
-
-            postgresql
-          ];
-
         in
         {
           devShell = pkgs.mkShell {
@@ -39,6 +43,10 @@
               gnumake
               lazydocker
             ];
+          };
+
+          packages = {
+            dev-image = import ./docker/dev.nix { inherit pkgs; };
           };
         };
     in

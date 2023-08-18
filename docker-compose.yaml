@@ -1,0 +1,108 @@
+version: '2.3'
+services:
+  backend: &backend
+    image: solobania-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app:ro
+      - app-var:/app-var
+      - cache-bundle:/root/.cache/bundle
+      - frontend-node-modules:/app/frontend/node_modules
+      - frontend-psc-output:/app/frontend/output
+      - frontend-spago:/app/frontend/.spago
+      - rails-log:/app/rails/log
+      - rails-tmp:/app/rails/tmp
+    environment:
+      # Shell
+      BASH_ENV: /root/.bash_env
+      HISTFILE: /app/var/.bash_history
+      EDITOR: vim
+
+      # Strages
+      DB_HOST: db
+      PSQL_HISTORY: /app/var/.psql_history
+
+      # URL for the whole web service.
+      # BASE_URL must be FRONTEND_HOST with http:// prepended.
+      BASE_URL: "${BASE_URL:-http://localhost:3000}"
+      FRONTEND_HOST: "${FRONTEND_HOST:-localhost:3000}"
+
+      # JWT secret consumed by backend.
+      JWT_SECRET: "${JWT_SECRET:-jwtS3cr3t}"
+
+      # Rails
+      GEM_HOME: /root/.cache/bundle
+      BUNDLE_PATH:  /root/.cache/bundle
+      BUNDLE_BIN:  /root/.cache/bundle/bin
+      BUNDLE_APP_CONFIG: /root/.cache/bundle
+      BUNDLE_DEPLOYMENT: 1
+      BOOTSNAP_CACHE_DIR: /root/.cache/bundle/bootsnap
+      RAILS_HOST: rails
+      RAILS_LOG_LEVEL: "${RAILS_LOG_LEVEL:-info}"
+      RAILS_LOG_TO_STDOUT: "1"
+      WEB_CONCURRENCY: 1
+    depends_on:
+      - db
+
+  bash:
+    <<: *backend
+    command: bash
+
+  rails:
+    <<: *backend
+    command: bin/start development
+    working_dir: /app/rails
+    ports:
+      - "3000"
+
+  frontend-dev:
+    <<: *backend
+    command: >
+        bash -c
+        "(yarn install && spago build || true);
+          yarn dev --mode development"
+    working_dir: /app/frontend
+    ports:
+      - "${APP_HTTP_PORT:-3000}:8080"
+
+  frontend-purs-dev:
+    <<: *backend
+    command: ["/bin/wait-for-it", "frontend-dev:8080", "--timeout=0", "--", "yarn", "pscid"]
+    working_dir: /app/frontend
+    depends_on:
+      - frontend-dev
+
+  db:
+    image: postgres:15.4-alpine
+    command: postgres -c log_destination=stderr -c log_statement=all -c log_connections=on -c log_disconnections=on
+    volumes:
+      - db-log:/root/log:cached
+      - postgres:/var/lib/postgresql/data
+    environment:
+      PSQL_HISTORY: /root/log/.psql_history
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432"
+
+volumes:
+  # Databases and storages.
+  postgres:
+
+  # Logs for database queries.
+  db-log:
+
+  # Various mutable files to make development easier.
+  # Contains things like the ~/.bash_history file when operating in
+  # the container.
+  app-var:
+
+  # Directories under frontend.
+  frontend-node-modules:
+  frontend-psc-output:
+  frontend-spago:
+
+  # Directories under rails.
+  cache-bundle:
+  rails-log:
+  rails-tmp:

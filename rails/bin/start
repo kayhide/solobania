@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+
+set -eu
+
+export APP_ENV=$1
+export RAILS_ENV="$APP_ENV"
+export DISABLE_SPRING=1
+
+BASE_DIR="$(cd "$(dirname "$0")/.." > /dev/null 2>&1 && pwd)"
+cd "$BASE_DIR"
+
+if [[ ${RAILS_ENV:-development} != production ]]; then
+    bundle install
+fi
+
+# if ! bundle exec rails runner "ActiveRecord::Base.connection" >/dev/null 2>&1; then
+#     bundle exec rails db:create db:schema:load
+# else
+#     bundle exec rails db:migrate
+# fi
+
+case $APP_ENV in
+    development)
+        # bundle exec rails db:seed
+        [[ -f tmp/pids/server.pid ]] && rm tmp/pids/server.pid
+        exec bundle exec rails server --binding 0.0.0.0
+        ;;
+
+    production)
+        bundle exec rails db:seed
+        exec bundle exec rails server --binding 0.0.0.0
+        ;;
+
+    test)
+        exec bundle exec guard
+        ;;
+esac
