@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.underline-effect {
+  &::before {
+    content: "";
+    @apply absolute inset-x-0 bottom-0 mx-auto;
+    @apply border-b-2 border-current;
+    @apply w-0 transition-width duration-100;
+  }
+
+  &:hover,
+  &:focus,
+  &.active {
+    &::before {
+      @apply w-full;
+    }
+  }
+}
+
+.dashed-underline {
+  &::before {
+    content: "";
+    @apply absolute inset-x-0 bottom-0 mx-auto;
+    @apply border-b border-dashed border-gray-500;
+    @apply transition duration-200;
+  }
+}
+
+.emptiable-text {
+  &::before {
+    content: "\200b";
+  }
+}

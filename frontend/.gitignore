@@ -1,0 +1,31 @@
+# Dependencies
+.psci_modules
+bower_components
+
+# Dot files
+.psci
+.pulp-cache
+.purs-repl
+.package-lock
+.psc-ide-port
+.cache
+
+# IDE files
+*.code-workspace
+
+# Generated
+dce-output
+dist/*
+!dist/.keep
+# *.lock
+*.map
+
+
+.spago/*
+!.spago/.keep
+
+output/*
+!output/.keep
+
+node_modules/*
+!node_modules/.keep
