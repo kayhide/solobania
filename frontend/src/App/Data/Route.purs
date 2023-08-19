@@ -2,11 +2,14 @@ module App.Data.Route where
 
 import AppPrelude hiding ((/))
 import Routing.Duplex (RouteDuplex', root)
+import Routing.Duplex as Routing
 import Routing.Duplex.Generic (noArgs, sum)
 import Routing.Duplex.Generic.Syntax ((/))
+import Routing.Hash (setHash)
 
 data Route
   = Home
+  | Mitorizan
   | Login
   | Logout
 
@@ -24,6 +27,13 @@ routeCodec =
   root
     $ sum
         { "Home": noArgs
+        , "Mitorizan": "mitorizan" / noArgs
         , "Login": "login" / noArgs
         , "Logout": "logout" / noArgs
         }
+
+navigate :: forall m. MonadEffect m => Route -> m Unit
+navigate route = liftEffect $ setHash $ Routing.print routeCodec route
+
+hrefTo :: Route -> String
+hrefTo route = "#" <> Routing.print routeCodec route

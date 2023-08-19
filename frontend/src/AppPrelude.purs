@@ -42,6 +42,7 @@ module AppPrelude
   , module Effect.Aff.Class
   , module Effect.Class
   , module Effect.Exception
+  , module Effect.Unsafe
   , module Foreign.Object
   , module Type.Proxy
   , module Unsafe.Coerce
@@ -96,6 +97,7 @@ import Effect.Aff (Aff, Milliseconds(..), delay)
 import Effect.Aff.Class (class MonadAff, liftAff)
 import Effect.Class (class MonadEffect, liftEffect)
 import Effect.Exception (throw)
+import Effect.Unsafe (unsafePerformEffect)
 import Foreign.Object (Object)
 import Type.Proxy (Proxy(..))
 import Unsafe.Coerce (unsafeCoerce)

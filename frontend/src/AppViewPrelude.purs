@@ -17,7 +17,7 @@ import Data.String as String
 import Data.String.CodePoints as CodePoints
 import React.Basic.DOM.Events (capture, capture_, target, targetValue)
 import React.Basic.Events (handler, handler_, merge)
-import React.Basic.Hooks (Hook, JSX, ReactComponent, ReactContext, element, fragment, keyed, mkReducer, reactComponent, readRefMaybe, useContext, useEffect, useMemo, useReducer, useRef, useState)
+import React.Basic.Hooks (Hook, JSX, Component, component, fragment, keyed, readRefMaybe, useContext, useEffect, useMemo, useReducer, useRef, useState)
 import React.Basic.Hooks as Hooks
 import React.Basic.Hooks.Aff (useAff)
 

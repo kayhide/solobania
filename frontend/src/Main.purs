@@ -10,7 +10,6 @@ import App.View.Router as Router
 import Control.Monad.Maybe.Trans (MaybeT(..), runMaybeT)
 import Data.String as String
 import React.Basic.DOM.Client (createRoot, renderRoot)
-import React.Basic.Hooks (element)
 import Web.DOM.NonElementParentNode (getElementById)
 import Web.DOM.ParentNode (querySelector)
 import Web.HTML (window)
@@ -41,7 +40,7 @@ main = do
         Just elm -> do
           router <- Router.make { baseUrl, frontendHost, logLevel, timezone }
           root <- createRoot elm
-          renderRoot root $ element router {}
+          renderRoot root $ router {}
 
 readMeta :: String -> Effect (Maybe String)
 readMeta name =
