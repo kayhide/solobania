@@ -13,7 +13,7 @@ down:
 
 # `docker-compose port` does not work because it only picks the first port which is bound on ipv4.
 # To pick a port bound to ipv6, refer to the last item listed in insepction.
-envs: DB_PORT = $(shell docker inspect $(COMPOSE_PROJECT_NAME)_db_1 | jq -r '.[].NetworkSettings.Ports."5432/tcp"[-1].HostPort')
+envs: DB_PORT = $(shell docker inspect $(COMPOSE_PROJECT_NAME)-db-1 | jq -r '.[].NetworkSettings.Ports."5432/tcp"[-1].HostPort')
 envs:
 	@mkdir -p .direnv/envs
 	@echo "$(DB_PORT)" > .direnv/envs/DB_PORT
