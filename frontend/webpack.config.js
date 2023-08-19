@@ -73,7 +73,7 @@ module.exports = {
 
   devServer: {
     host: "0.0.0.0",
-    port: "8080",
+    port: process.env.APP_HTTP_PORT || "3000",
     hot: true,
     headers: {
       "Access-Control-Allow-Origin": "*",
@@ -81,9 +81,6 @@ module.exports = {
     proxy: {
       "/api": "http://rails:3000",
       "/rails": "http://rails:3000",
-    },
-    client: {
-      webSocketURL: `ws://${process.env.FRONTEND_HOST}/ws`,
     },
   },
 };
