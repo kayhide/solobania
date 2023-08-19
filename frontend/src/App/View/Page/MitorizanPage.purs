@@ -22,6 +22,7 @@ type State
   = { digits :: Int
     , lines :: Int
     , count :: Int
+    , font :: String
     }
 
 type ChildProps
@@ -34,7 +35,7 @@ make = do
   skeleton <- Single.make
   alpha <- makeAlpha
   component "MitorizanPage" \_ -> React.do
-    state /\ setState <- useState { digits: 4, lines: 10, count: 0 }
+    state /\ setState <- useState { digits: 4, lines: 10, count: 0, font: "font-caveat" }
     pure
       $ skeleton
           { layout: Single.Wide
@@ -66,7 +67,8 @@ makeAlpha =
       renderNumber n =
         Value.render
           { text: format fmt $ Int.toNumber n
-          , large: true
+          , dense: true
+          , huge: true
           , justify: Value.JustifyRight
           }
     pure
@@ -81,7 +83,7 @@ makeAlpha =
                       { grow: true
                       , content:
                           R.div
-                            { className: "w-80 mx-auto border-2 border-primary-700 rounded"
+                            { className: "w-80 mx-auto border-2 border-primary-700 rounded " <> state.font
                             , children:
                                 pure
                                   $ Container.render
@@ -131,7 +133,7 @@ renderHeader { state, setState } =
             { flex: Container.RowDense
             , fragment:
                 [ R.input
-                    { className: "w-32 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
+                    { className: "w-24 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
                     , type: "number"
                     , value: show state.digits
                     , onChange:
@@ -157,7 +159,7 @@ renderHeader { state, setState } =
             { flex: Container.RowDense
             , fragment:
                 [ R.input
-                    { className: "w-32 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
+                    { className: "w-24 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
                     , type: "number"
                     , value: show state.lines
                     , onChange:
@@ -175,7 +177,31 @@ renderHeader { state, setState } =
                     }
                 ]
             }
+        , Container.render
+            { flex: Container.RowDense
+            , fragment:
+                [ R.select
+                    { className: "p-2 border border-secondary-500 rounded outline-none focus:ring"
+                    , value: state.font
+                    , onChange:
+                        capture targetValue \x -> do
+                          for_ x \x' ->
+                            setState $ _ { font = x', count = 0 }
+                    , children:
+                        fonts
+                          <#> \{ label, value } ->
+                              R.option { label, value, children: pure $ R.text label }
+                    }
+                ]
+            }
         , R.div { className: "flex-grow" }
         , Value.render { text: show state.count }
         ]
     }
+
+fonts :: Array _
+fonts =
+  [ { label: "Caveat", value: "font-caveat" }
+  , { label: "Damion", value: "font-damion" }
+  , { label: "Short Stack", value: "font-short-stack" }
+  ]

@@ -33,6 +33,7 @@ type PropsRowOptional
     , dense :: Boolean
     , small :: Boolean
     , large :: Boolean
+    , huge :: Boolean
     , translucent :: Boolean
     , justify :: Justify
     , onClick :: Effect Unit
@@ -57,6 +58,7 @@ render props = do
       , dense: false
       , small: false
       , large: false
+      , huge: false
       , translucent: false
       , justify: unsafeCoerce unit
       , onClick: unsafeCoerce unit
@@ -70,8 +72,9 @@ render props = do
     , active
     , dense
     , small
-    , translucent
     , large
+    , huge
+    , translucent
     } = Record.merge props def :: Props
 
     justify = Nullable.toMaybe (unsafeCoerce props).justify
@@ -111,6 +114,7 @@ render props = do
         <> bool " px-3 py-2" " px-2 py-1" dense
         <> bool "" " text-sm" small
         <> bool "" " text-xl" large
+        <> bool "" " text-3xl" huge
         <> bool "" " bg-opacity-75" translucent
         <> mmap (append " ") justifyClass
         <> bool "" " cursor-pointer" (isJust onClick)

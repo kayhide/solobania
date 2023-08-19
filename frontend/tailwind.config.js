@@ -16,6 +16,11 @@ module.exports = {
         divider: colors.stone,
         highlight: colors.yellow[100],
       },
+      fontFamily: {
+        caveat: ["Caveat", "cursive"],
+        damion: ["Damion", "cursive"],
+        "short-stack": ["Short Stack", "cursive"],
+      },
     },
   },
   plugins: [],
