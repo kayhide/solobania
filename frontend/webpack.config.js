@@ -7,13 +7,16 @@ const isDevServer = process.argv.some(
 );
 
 module.exports = {
+  mode: "production",
+
   entry: {
     main: "./src/index.js",
   },
+
   output: {
-    filename: `js/[name]${isDevServer ? "" : "-[hash:8]"}.js`,
-    chunkFilename: `js/[name]${isDevServer ? "" : "-[hash:8]"}.chunk.js`,
-    assetModuleFilename: "media/[name]-[hash:8][ext]",
+    filename: `js/[name]${isDevServer ? "" : "-[contenthash:8]"}.js`,
+    chunkFilename: `js/[name]${isDevServer ? "" : "-[contenthash:8]"}.chunk.js`,
+    assetModuleFilename: "media/[name]-[contenthash:8][ext]",
     path: path.resolve(__dirname, "dist"),
   },
 
@@ -80,7 +83,7 @@ module.exports = {
       "/rails": "http://rails:3000",
     },
     client: {
-      webSocketURL: `ws://${process.env.FRONTEND_HOST}/ws`
+      webSocketURL: `ws://${process.env.FRONTEND_HOST}/ws`,
     },
   },
 };
