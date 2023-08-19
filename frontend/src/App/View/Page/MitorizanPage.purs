@@ -97,7 +97,7 @@ makeAlpha =
                             }
                       }
               , R.div
-                  { className: "w-full"
+                  { className: "flex-0 w-full pb-8"
                   , children:
                       pure
                         $ Button.render
@@ -127,27 +127,53 @@ renderHeader { state, setState } =
             { className: "text-secondary-700 font-bold"
             , children: pure $ R.text "Digits"
             }
-        , R.input
-            { className: "p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
-            , type: "number"
-            , value: show state.digits
-            , onChange:
-                capture targetValue \x -> do
-                  for_ (x >>= Int.fromString) \x' -> do
-                    setState $ _ { digits = x' }
+        , Container.render
+            { flex: Container.RowDense
+            , fragment:
+                [ R.input
+                    { className: "w-32 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
+                    , type: "number"
+                    , value: show state.digits
+                    , onChange:
+                        capture targetValue \x -> do
+                          for_ (x >>= Int.fromString) \x' -> do
+                            setState $ _ { digits = x', count = 0 }
+                    }
+                , Button.render
+                    { icon: "fa fa-angle-up"
+                    , onClick: setState $ _ { digits = state.digits + 1, count = 0 }
+                    }
+                , Button.render
+                    { icon: "fa fa-angle-down"
+                    , onClick: setState $ _ { digits = state.digits - 1, count = 0 }
+                    }
+                ]
             }
         , R.label
             { className: "text-secondary-700 font-bold"
             , children: pure $ R.text "Lines"
             }
-        , R.input
-            { className: "p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
-            , type: "number"
-            , value: show state.lines
-            , onChange:
-                capture targetValue \x -> do
-                  for_ (x >>= Int.fromString) \x' -> do
-                    setState $ _ { lines = x' }
+        , Container.render
+            { flex: Container.RowDense
+            , fragment:
+                [ R.input
+                    { className: "w-32 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
+                    , type: "number"
+                    , value: show state.lines
+                    , onChange:
+                        capture targetValue \x -> do
+                          for_ (x >>= Int.fromString) \x' -> do
+                            setState $ _ { lines = x', count = 0 }
+                    }
+                , Button.render
+                    { icon: "fa fa-angle-up"
+                    , onClick: setState $ _ { lines = state.lines + 1, count = 0 }
+                    }
+                , Button.render
+                    { icon: "fa fa-angle-down"
+                    , onClick: setState $ _ { lines = state.lines - 1, count = 0 }
+                    }
+                ]
             }
         , R.div { className: "flex-grow" }
         , Value.render { text: show state.count }
