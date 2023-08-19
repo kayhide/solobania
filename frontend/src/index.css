@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  height: 100vh;
+  max-height: -webkit-fill-available;
+}
+
+#app {
+  height: 100%;
+}
+
 .underline-effect {
   &::before {
     content: "";

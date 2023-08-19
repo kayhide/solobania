@@ -48,21 +48,16 @@ make = do
     pure
       $ R.div
           { className:
-              "flex flex-col w-screen h-screen bg-background-primary"
+              "flex flex-col w-full h-full bg-background-primary"
                 <> mmap (append " ") className
           , children:
               [ header
               , R.div
-                  { className: "w-full flex-grow overflow-y-hidden"
+                  { className: "relative flex-grow overflow-y-hidden flex flex-row justify-center"
                   , children:
                       [ R.div
-                          { className: "h-full flex mx-auto " <> width
-                          , children:
-                              [ R.div
-                                  { className: "w-full h-full relative"
-                                  , children: pure alpha
-                                  }
-                              ]
+                          { className: "relative h-full " <> width
+                          , children: pure alpha
                           }
                       , omega
                       ]
