@@ -4,6 +4,7 @@ import AppViewPrelude
 import App.Data.Route (Route, routeCodec, navigate)
 import App.Data.Route as Route
 import App.View.Page.MitorizanPage as MitorizanPage
+import App.View.Page.ShuzanPage as ShuzanPage
 import App.Env (Env)
 import App.Context (context)
 import App.View.Agent.NotificationAgent (useNotificationAgent)
@@ -15,6 +16,7 @@ import Routing.Hash (matchesWith)
 make :: Env -> Component {}
 make env = do
   mitorizanPage <- MitorizanPage.make
+  shuzanPage <- ShuzanPage.make
   component "Router" \_ -> React.do
     route /\ setRoute <- useState Route.Home
     notifier <- useNotificationAgent
@@ -31,7 +33,7 @@ make env = do
       matchesWith (parse routeCodec) \_src dst -> do
         case dst of
           Route.Home -> do
-            navigate Route.Mitorizan
+            navigate $ Route.Shuzan "15"
           Route.Logout -> do
             navigate Route.Home
           _ -> setMovingTo $ const $ Just dst
@@ -45,6 +47,7 @@ make env = do
           [ case route of
               Route.Home -> mempty
               Route.Mitorizan -> authorize $ mitorizanPage {}
+              Route.Shuzan key -> authorize $ shuzanPage { key }
               Route.Login -> mempty
               Route.Logout -> mempty
           ]

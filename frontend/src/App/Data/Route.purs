@@ -1,7 +1,7 @@
 module App.Data.Route where
 
 import AppPrelude hiding ((/))
-import Routing.Duplex (RouteDuplex', root)
+import Routing.Duplex (RouteDuplex', root, segment)
 import Routing.Duplex as Routing
 import Routing.Duplex.Generic (noArgs, sum)
 import Routing.Duplex.Generic.Syntax ((/))
@@ -10,6 +10,7 @@ import Routing.Hash (setHash)
 data Route
   = Home
   | Mitorizan
+  | Shuzan String
   | Login
   | Logout
 
@@ -28,6 +29,7 @@ routeCodec =
     $ sum
         { "Home": noArgs
         , "Mitorizan": "mitorizan" / noArgs
+        , "Shuzan": "shuzan" / segment
         , "Login": "login" / noArgs
         , "Logout": "logout" / noArgs
         }
