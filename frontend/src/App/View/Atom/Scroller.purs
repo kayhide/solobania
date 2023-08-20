@@ -2,6 +2,7 @@ module App.View.Atom.Scroller where
 
 import AppViewPrelude
 import App.View.Atom.Container as Container
+import Data.Nullable as Nullable
 import Prim.Row as Row
 import React.Basic.DOM as R
 import Record as Record
@@ -23,6 +24,7 @@ type PropsRowOptional
     , fullHeight :: Boolean
     , someWidth :: Boolean
     , grow :: Boolean
+    , shrink :: Boolean
     )
 
 type Props
@@ -34,7 +36,8 @@ def =
   , padding: false
   , fullHeight: false
   , someWidth: false
-  , grow: false
+  , grow: unsafeCoerce unit
+  , shrink:unsafeCoerce unit
   }
 
 render ::
@@ -44,7 +47,12 @@ render ::
   { | props } -> JSX
 render props = do
   let
-    { content, color, padding, fullHeight, someWidth, grow } = Record.merge props def :: Props
+    { content, color, padding, fullHeight, someWidth } = Record.merge props def :: Props
+
+    grow = Nullable.toMaybe (unsafeCoerce props).grow
+
+    shrink = Nullable.toMaybe (unsafeCoerce props).shrink
+
 
     colorClass = case color of
       Primary -> "bg-background-primary"
@@ -56,7 +64,10 @@ render props = do
         "relative"
           <> bool "" " h-full" fullHeight
           <> bool "" " w-60" someWidth
-          <> bool "" " flex-grow" grow
+          <> bool "" " flex-grow" (grow == Just true)
+          <> bool "" " flex-grow-0" (grow == Just false)
+          <> bool "" " flex-shrink" (shrink == Just true)
+          <> bool "" " flex-shrink-0" (shrink == Just false)
           <> (mmap (append " ") colorClass)
     , children:
         pure

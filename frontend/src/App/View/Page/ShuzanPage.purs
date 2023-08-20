@@ -3,7 +3,7 @@ module App.View.Page.ShuzanPage where
 import AppViewPrelude
 import App.Data.Route (navigate)
 import App.Data.Route as Route
-import App.Soloban (Problem(..), Spec, generate)
+import App.Soloban (Problem(..), Spec, generate, problemCount)
 import App.Soloban as Soloban
 import App.View.Atom.Button as Button
 import App.View.Atom.Container as Container
@@ -91,12 +91,28 @@ makeAlpha =
             MitoriProblem xs -> xs ^? ix state.index <<< to _.numbers <<< to (_ /\ length xs)
             _ -> Nothing
 
+      rewind = do
+        case 0 < state.index of
+          false -> case 0 < state.subjectIndex of
+            false -> pure unit
+            true -> do
+              let
+                index =
+                  fromMaybe 0
+                    $ state.problems
+                    ^? ix (state.subjectIndex - 1)
+                    <<< to problemCount
+                    <<< to (_ - 1)
+              setState $ _ { subjectIndex = state.subjectIndex - 1, index = index }
+          true -> setState $ _ { index = state.index - 1 }
+
       proceed = do
         case state.index < count - 1 of
           false -> setState $ _ { subjectIndex = state.subjectIndex + 1, index = 0 }
           true -> setState $ _ { index = state.index + 1 }
     shortcut <- useKeyboardShortcut
     useEffect (currentProblem /\ state.index) do
+      shortcut.register "Backspace" rewind
       shortcut.register "Enter" proceed
       shortcut.register " " proceed
       pure $ pure unit
@@ -110,50 +126,67 @@ makeAlpha =
           }
     pure
       $ Container.render
-          { flex: Container.Col
+          { flex: Container.Row
           , position: Container.Fill
-          , justify: Container.JustifyEnd
+          , justify: Container.JustifyBetween
           , padding: true
           , fragment:
-              [ Monoid.guard (0 < length numbers)
-                  $ Scroller.render
-                      { grow: true
-                      , content:
-                          fragment
-                            [ R.div
-                                { className: "w-80 mx-auto p-2 text-center text-primary-900 border-x-2 border-t-2 border-primary-700 bg-primary-200 rounded-t"
-                                , children:
-                                    pure
-                                      $ R.text
-                                      $ show (state.index + 1)
-                                      <> " / "
-                                      <> show count
-                                }
-                            , R.div
-                                { className: "w-80 mx-auto border-x-2 border-b-2 border-primary-700 rounded-b " <> state.font
-                                , children:
-                                    pure
-                                      $ Container.render
-                                          { flex: Container.ColNoGap
-                                          , padding: true
-                                          , fullHeight: true
-                                          , fragment:
-                                              [ fragment $ renderNumber <$> numbers
-                                              , R.hr { className: "border border-divider-500" }
-                                              , renderNumber $ foldl (+) 0 numbers
-                                              ]
-                                          }
-                                }
-                            ]
-                      }
-              , R.div
-                  { className: "flex-0 w-full pb-8"
+              [ R.div
+                  { className: "flex-1"
                   , children:
                       pure
                         $ Button.render
                             { color: Button.Primary
+                            , icon: "fa fa-angle-left"
+                            , bare: true
+                            , textLeft: true
                             , width: Button.Full
-                            , icon: "fa fa-bolt"
+                            , height: Button.Full
+                            , onClick: rewind
+                            }
+                  }
+              , Scroller.render
+                  { shrink: false
+                  , someWidth: true
+                  , content:
+                      fragment
+                        [ R.div
+                            { className: "w-full p-2 text-center text-primary-900 border-x-2 border-t-2 border-primary-700 bg-primary-200 rounded-t"
+                            , children:
+                                pure
+                                  $ R.text
+                                  $ show (state.index + 1)
+                                  <> " / "
+                                  <> show count
+                            }
+                        , R.div
+                            { className: "w-full border-x-2 border-b-2 border-primary-700 rounded-b " <> state.font
+                            , children:
+                                pure
+                                  $ Container.render
+                                      { flex: Container.ColNoGap
+                                      , padding: true
+                                      , fullHeight: true
+                                      , fragment:
+                                          [ fragment $ renderNumber <$> numbers
+                                          , R.hr { className: "border border-divider-500" }
+                                          , renderNumber $ foldl (+) 0 numbers
+                                          ]
+                                      }
+                            }
+                        ]
+                  }
+              , R.div
+                  { className: "flex-1"
+                  , children:
+                      pure
+                        $ Button.render
+                            { color: Button.Primary
+                            , icon: "fa fa-angle-right"
+                            , bare: true
+                            , textRight: true
+                            , width: Button.Full
+                            , height: Button.Full
                             , onClick: proceed
                             }
                   }
