@@ -12,6 +12,7 @@ gem "pg", "~> 1.1"
 gem "pry-doc"
 gem "pry-rails"
 gem "puma", "~> 5.0"
+gem "rack-cors"
 gem "tzinfo-data"
 
 group :development, :test do
