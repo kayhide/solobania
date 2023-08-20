@@ -24,7 +24,7 @@
 
               my-ruby
 
-              postgresql
+              postgresql_15
             ];
           };
         };
@@ -41,6 +41,7 @@
               docker-compose
               entr
               gnumake
+              graphviz
               lazydocker
             ];
           };

@@ -8,6 +8,8 @@ gem "rails", "~> 7.0.4", ">= 7.0.4.3"
 gem "bcrypt", "~> 3.1.7"
 gem "bootsnap", require: false
 gem "pg", "~> 1.1"
+gem "pry-doc"
+gem "pry-rails"
 gem "puma", "~> 5.0"
 gem "tzinfo-data"
 
@@ -18,7 +20,7 @@ group :development, :test do
   gem "faker"
   gem "guard"
   gem "guard-rspec"
-  gem "rspec-rails", "~> 4.0.0"
+  gem "rspec-rails", "~> 6.0.0"
   gem "rubocop"
   gem "spring-commands-rspec"
   gem "webmock"

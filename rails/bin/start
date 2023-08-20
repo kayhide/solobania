@@ -13,11 +13,11 @@ if [[ ${RAILS_ENV:-development} != production ]]; then
     bundle install
 fi
 
-# if ! bundle exec rails runner "ActiveRecord::Base.connection" >/dev/null 2>&1; then
-#     bundle exec rails db:create db:schema:load
-# else
-#     bundle exec rails db:migrate
-# fi
+if ! bundle exec rails runner "ActiveRecord::Base.connection" >/dev/null 2>&1; then
+    bundle exec rails db:create db:schema:load
+else
+    bundle exec rails db:migrate
+fi
 
 case $APP_ENV in
     development)

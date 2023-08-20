@@ -33,11 +33,6 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = false
-
-  config.action_mailer.perform_caching = false
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -53,6 +48,14 @@ Rails.application.configure do
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
 
+  # Avoid creating the db/schema.rb file unless RAILS_DUMP_SCHEMA is set.
+  # In the Docker container, the path is not writable.
+  config.active_record.dump_schema_after_migration = ENV.key?("RAILS_DUMP_SCHEMA")
+
+  # When `structure.sql` is wanted, set RAILS_SCHEMA_FORMAT=sql and
+  # run the task:
+  #   rails db:schema:dump
+  config.active_record.schema_format = ENV.fetch("RAILS_SCHEMA_FORMAT", :ruby).to_sym
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true

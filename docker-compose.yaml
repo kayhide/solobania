@@ -21,6 +21,7 @@ services:
 
       # Strages
       DB_HOST: db
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
       PSQL_HISTORY: /app/var/.psql_history
 
       # URL for the whole web service.
@@ -84,7 +85,7 @@ services:
       - postgres:/var/lib/postgresql/data
     environment:
       PSQL_HISTORY: /root/log/.psql_history
-      POSTGRES_PASSWORD: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
     ports:
       - "5432"
 
