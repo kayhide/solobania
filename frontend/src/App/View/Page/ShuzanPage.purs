@@ -11,6 +11,7 @@ import App.View.Atom.Scroller as Scroller
 import App.View.Atom.Value as Value
 import App.View.Helper.KeyboardShortcut (useKeyboardShortcut)
 import App.View.Skeleton.Single as Single
+import App.View.Organism.HeaderMenu as HeaderMenu
 import Data.Array as Array
 import Data.Formatter.Number (Formatter(..), format)
 import Data.Int as Int
@@ -42,6 +43,7 @@ emptifyState = _ { spec = Nothing, problems = [], subjectIndex = 0, index = 0 }
 make :: Component Props
 make = do
   skeleton <- Single.make
+  header <- HeaderMenu.make
   alpha <- makeAlpha
   component "ShuzanPage" \{ key } -> React.do
     state /\ setState <-
@@ -65,7 +67,11 @@ make = do
     pure
       $ skeleton
           { layout: Single.Wide
-          , header: renderHeader { state, setState }
+          , header:
+              fragment
+                [ header {}
+                , renderHeader { state, setState }
+                ]
           , alpha: alpha { state, setState }
           }
 
@@ -163,31 +169,15 @@ renderHeader :: HeaderProps -> JSX
 renderHeader { state, setState } = do
   let
     currentSubject = state.spec ^? _Just <<< to unwrap <<< to _.subjects <<< ix state.subjectIndex
-
-    backButton =
-      Button.render
-        { color: Button.Secondary
-        , icon: "fa fa-angle-left"
-        , bare: true
-        , onClick: navigate Route.Home
-        }
   case { spec: _, subject: _ } <$> state.spec <*> currentSubject of
-    Nothing ->
-      Container.render
-        { flex: Container.Row
-        , align: Container.AlignBaseline
-        , padding: true
-        , fragment:
-            []
-        }
+    Nothing -> mempty
     Just { spec, subject } ->
       Container.render
         { flex: Container.Row
         , align: Container.AlignBaseline
         , padding: true
         , fragment:
-            [ backButton
-            , R.div
+            [ R.div
                 { className: "text-secondary-700 text-xl"
                 , children: pure $ R.text $ (unwrap spec).label <> " " <> fst subject
                 }

@@ -1,6 +1,7 @@
 module App.View.Page.MitorizanPage where
 
 import AppViewPrelude
+import App.View.Organism.HeaderMenu as HeaderMenu
 import App.View.Atom.Button as Button
 import App.View.Atom.Container as Container
 import App.View.Atom.Scroller as Scroller
@@ -33,13 +34,18 @@ type ChildProps
 make :: Component Props
 make = do
   skeleton <- Single.make
+  header <- HeaderMenu.make
   alpha <- makeAlpha
   component "MitorizanPage" \_ -> React.do
     state /\ setState <- useState { digits: 4, lines: 10, count: 0, font: "font-caveat" }
     pure
       $ skeleton
           { layout: Single.Wide
-          , header: renderHeader { state, setState }
+          , header:
+              fragment
+                [ header {}
+                , renderHeader { state, setState }
+                ]
           , alpha: alpha { state, setState }
           }
 
