@@ -5,6 +5,7 @@ import Control.Monad.Rec.Class (Step(..), tailRecM)
 import Control.Monad.Writer (WriterT, runWriterT, tell, lift)
 import Data.Array as Array
 import Data.Int as Int
+import Data.Map as Map
 import Effect.Random (randomInt, randomBool)
 
 data Category
@@ -50,34 +51,19 @@ data Problem
   | KakeProblem (Array { left :: Int, right :: Int })
   | WariProblem (Array { left :: Int, right :: Int })
 
+derive instance genericProblem :: Generic Problem _
+
+instance eqProblem :: Eq Problem where
+  eq = genericEq
+
+instance showProblem :: Show Problem where
+  show = genericShow
+
 problemCount :: Problem -> Int
 problemCount = case _ of
   MitoriProblem xs -> length xs
   KakeProblem xs -> length xs
   WariProblem xs -> length xs
-
-shuzan_15 :: Spec
-shuzan_15 =
-  Spec
-    { category: Shuzan
-    , label: "第15級"
-    , subjects:
-        [ "見取算A"
-            /\ Mitori
-                ( Array.concat
-                    [ replicate 5 { digits: 1 /\ 1, lines: 5, negative: true }
-                    , replicate 5 { digits: 1 /\ 1, lines: 6, negative: true }
-                    ]
-                )
-        , "見取算B"
-            /\ Mitori
-                ( Array.concat
-                    [ replicate 5 { digits: 1 /\ 1, lines: 5, negative: true }
-                    , replicate 5 { digits: 1 /\ 1, lines: 6, negative: true }
-                    ]
-                )
-        ]
-    }
 
 generate :: Subject -> Effect Problem
 generate = case _ of
@@ -112,3 +98,75 @@ generateMitori { digits, lines, negative } = do
                     true -> negate <$> randomInt (min sum d1) d0
       tell [ x ]
       pure $ Loop $ { n: n - 1, sum: sum + x }
+
+store :: Map String Spec
+store =
+  Map.fromFoldable
+    [ "shuzan-15"
+        /\ Spec
+            { category: Shuzan
+            , label: "珠算 第15級"
+            , subjects:
+                [ "見取算A"
+                    /\ Mitori
+                        ( Array.concat
+                            [ replicate 5 { digits: 1 /\ 1, lines: 5, negative: true }
+                            , replicate 5 { digits: 1 /\ 1, lines: 6, negative: true }
+                            ]
+                        )
+                , "見取算B"
+                    /\ Mitori
+                        ( Array.concat
+                            [ replicate 5 { digits: 1 /\ 1, lines: 5, negative: true }
+                            , replicate 5 { digits: 1 /\ 1, lines: 6, negative: true }
+                            ]
+                        )
+                ]
+            }
+    , "shuzan-10"
+        /\ Spec
+            { category: Shuzan
+            , label: "珠算 第10級"
+            , subjects:
+                [ "見取算A"
+                    /\ Mitori
+                        [ { digits: 1 /\ 1, lines: 7, negative: false }
+                        , { digits: 1 /\ 1, lines: 7, negative: true }
+                        , { digits: 1 /\ 1, lines: 7, negative: false }
+                        , { digits: 1 /\ 1, lines: 7, negative: true }
+                        , { digits: 1 /\ 1, lines: 7, negative: false }
+                        , { digits: 1 /\ 1, lines: 7, negative: true }
+                        , { digits: 1 /\ 1, lines: 7, negative: false }
+                        , { digits: 1 /\ 1, lines: 7, negative: true }
+                        , { digits: 1 /\ 1, lines: 7, negative: false }
+                        , { digits: 1 /\ 1, lines: 7, negative: false }
+                        ]
+                , "見取算B"
+                    /\ Mitori
+                        [ { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        ]
+                , "見取算C"
+                    /\ Mitori
+                        [ { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: true }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        , { digits: 1 /\ 2, lines: 5, negative: false }
+                        ]
+                ]
+            }
+    ]
