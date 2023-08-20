@@ -1,7 +1,16 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: "Star Wars" }, { name: "Lord of the Rings" }])
-#   Character.create(name: "Luke", movie: movies.first)
+require "thor/shell/color"
+@shell = Thor::Shell::Color.new
+
+ENV.fetch("SEED_USERS") { "" }.split(";").each do |s|
+  m = s.match(/(?<username>.+):(?<password>.+)<(?<email>.+@.+)>/)
+  username = m["username"]&.strip
+  email = m["email"]&.strip
+  password = m["password"]&.strip
+  user = User.find_by(email: email)
+  if user
+    @shell.say_status :exist, "User #{user.username}<#{user.email}>", :cyan
+  else
+    User.create(username: username, email: email, password: password)
+    @shell.say_status :create, "User #{username}<#{email}>", :green
+  end
+end

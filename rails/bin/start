@@ -21,13 +21,12 @@ fi
 
 case $APP_ENV in
     development)
-        # bundle exec rails db:seed
+        bundle exec rails db:seed
         [[ -f tmp/pids/server.pid ]] && rm tmp/pids/server.pid
         exec bundle exec rails server --binding 0.0.0.0
         ;;
 
     production)
-        bundle exec rails db:seed
         exec bundle exec rails server --binding 0.0.0.0
         ;;
 
