@@ -3,13 +3,11 @@ module App.View.Page.HomePage where
 import AppViewPrelude
 import App.Data.Route (navigate)
 import App.Data.Route as Route
-import App.View.Organism.HeaderMenu as HeaderMenu
-import App.Soloban as Soloban
+import App.View.Agent.SpecsAgent (useSpecsAgent)
 import App.View.Atom.Button as Button
 import App.View.Atom.Container as Container
-import App.View.Atom.Value as Value
+import App.View.Organism.HeaderMenu as HeaderMenu
 import App.View.Skeleton.Single as Single
-import Data.Map as Map
 import Data.String as String
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
@@ -42,10 +40,14 @@ make = do
 makeAlpha :: Component ChildProps
 makeAlpha =
   component "Alpha" \_ -> React.do
+    specs <- useSpecsAgent
+    useEffect unit do
+      specs.load
+      pure $ pure unit
     let
-      renderSpec (key /\ spec) = do
+      renderSpec spec = do
         let
-          { label, subjects } = unwrap spec
+          { key, name } = unwrap spec
 
           route = case String.stripPrefix (wrap "shuzan-") key of
             Nothing -> Route.Home
@@ -54,20 +56,9 @@ makeAlpha =
           { className: "p-2 w-1/4"
           , children:
               [ Button.render
-                  { text: label
+                  { text: name
                   , fullWidth: true
                   , onClick: navigate route
-                  , content:
-                      Container.render
-                        { flex: Container.ColNoGap
-                        , fragment:
-                            subjects
-                              <#> \(name /\ _) ->
-                                  Value.render
-                                    { text: name
-                                    , dense: true
-                                    }
-                        }
                   }
               ]
           }
@@ -76,8 +67,6 @@ makeAlpha =
           { flex: Container.RowWrapping
           , position: Container.Fill
           , fragment:
-              [ fragment
-                  $ renderSpec
-                  <$> Map.toUnfoldable Soloban.store
-              ]
+              renderSpec
+                <$> specs.items
           }

@@ -3,8 +3,9 @@ module App.Context where
 import AppPrelude
 import App.Data.Route (Route)
 import App.Data.User (User)
-import App.Notification (Notifier)
 import App.Env (Env)
+import App.Notification (Notifier)
+import App.Store (Store)
 import React.Basic.Hooks (ReactContext, createContext)
 
 type Profile
@@ -16,6 +17,7 @@ type ContextRecord
     , notifier :: Notifier
     , route :: Route
     , currentProfile :: Maybe Profile
+    , store :: Store
     }
 
 -- | Context holds data which is widely refered to among components.

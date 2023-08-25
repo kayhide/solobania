@@ -3,6 +3,7 @@ module App.View.Router where
 import AppViewPrelude
 import App.Data.Route (Route, routeCodec, navigate)
 import App.Data.Route as Route
+import App.View.Agent.StoreAgent (useStoreAgent)
 import App.View.Page.MitorizanPage as MitorizanPage
 import App.View.Page.ShuzanPage as ShuzanPage
 import App.View.Page.HomePage as HomePage
@@ -26,6 +27,7 @@ make env = do
     route /\ setRoute <- useState Route.Home
     notifier <- useNotificationAgent
     sessions <- useSessionsAgent env notifier
+    store <- useStoreAgent
     movingTo /\ setMovingTo <- useState (Nothing :: Maybe Route)
     let
       currentProfile = { user: _ } <$> sessions.user
@@ -49,7 +51,7 @@ make env = do
       pure $ pure unit
     pure $ sessions.isReady
       # bool mempty do
-          provider context { env, notifier, route, currentProfile }
+          provider context { env, notifier, route, currentProfile, store }
             [ case route of
                 Route.Home -> authorize $ homePage {}
                 Route.Mitorizan -> authorize $ mitorizanPage {}
