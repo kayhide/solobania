@@ -15,6 +15,7 @@ import Data.Monoid as Monoid
 import Effect.Random as Random
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
+import App.View.Sl as Sl
 
 type Props
   = {}
@@ -78,46 +79,46 @@ makeAlpha =
           , justify: Value.JustifyRight
           }
     pure
-      $ Container.render
-          { flex: Container.Col
-          , position: Container.Fill
-          , justify: Container.JustifyEnd
-          , padding: true
-          , fragment:
-              [ Monoid.guard (0 < length numbers)
-                  $ Scroller.render
-                      { grow: true
-                      , content:
-                          R.div
-                            { className: "w-80 mx-auto border-2 border-primary-700 rounded " <> state.font
-                            , children:
-                                pure
-                                  $ Container.render
-                                      { flex: Container.ColNoGap
-                                      , padding: true
-                                      , fullHeight: true
-                                      , fragment:
-                                          [ fragment $ renderNumber <$> numbers
-                                          , R.hr { className: "border border-divider-500" }
-                                          , renderNumber $ foldl (+) 0 numbers
-                                          ]
-                                      }
-                            }
+      $ fragment
+          [ Container.render
+              { flex: Container.Col
+              , position: Container.Fill
+              , justify: Container.JustifyEnd
+              , padding: true
+              , fragment:
+                  [ Monoid.guard (0 < length numbers)
+                      $ Scroller.render
+                          { grow: true
+                          , content:
+                              R.div
+                                { className: "w-80 mx-auto border-2 border-primary-700 rounded " <> state.font
+                                , children:
+                                    pure
+                                      $ Container.render
+                                          { flex: Container.ColNoGap
+                                          , padding: true
+                                          , fullHeight: true
+                                          , fragment:
+                                              [ fragment $ renderNumber <$> numbers
+                                              , R.hr { className: "border border-divider-500" }
+                                              , renderNumber $ foldl (+) 0 numbers
+                                              ]
+                                          }
+                                }
+                          }
+                  , Button.render
+                      { variant: Button.Primary
+                      , fill: false
+                      , icon: "fa fa-bolt"
+                      , onClick: setGenerating not
                       }
-              , R.div
-                  { className: "flex-0 w-full pb-8"
-                  , children:
-                      pure
-                        $ Button.render
-                            { color: Button.Primary
-                            , width: Button.Full
-                            , icon: "fa fa-bolt"
-                            , disabled: generating
-                            , onClick: setGenerating not
-                            }
-                  }
-              ]
-          }
+                  ]
+              }
+          , R.div
+              { className: "absolute top-0 right-0 mx-16 my-8 text-4xl " <> state.font
+              , children: [ R.text $ show state.count ]
+              }
+          ]
 
 type HeaderProps
   = { state :: State
@@ -130,6 +131,7 @@ renderHeader { state, setState } =
     { flex: Container.Row
     , align: Container.AlignBaseline
     , padding: true
+    , fullWidth: true
     , fragment:
         [ R.label
             { className: "text-secondary-700 font-bold"
@@ -138,22 +140,26 @@ renderHeader { state, setState } =
         , Container.render
             { flex: Container.RowDense
             , fragment:
-                [ R.input
-                    { className: "w-24 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
+                [ Sl.input
+                    { className: "w-32 text-right"
                     , type: "number"
-                    , value: show state.digits
-                    , onChange:
+                    , value: show $ state.digits
+                    , onSlInput:
                         capture targetValue \x -> do
                           for_ (x >>= Int.fromString) \x' -> do
                             setState $ _ { digits = x', count = 0 }
                     }
-                , Button.render
-                    { icon: "fa fa-angle-up"
-                    , onClick: setState $ _ { digits = state.digits + 1, count = 0 }
-                    }
-                , Button.render
-                    { icon: "fa fa-angle-down"
-                    , onClick: setState $ _ { digits = state.digits - 1, count = 0 }
+                , Sl.button_group
+                    { children:
+                        [ Sl.button
+                            { onClick: capture_ $ setState $ _ { digits = state.digits + 1, count = 0 }
+                            , children: R.i { className: "fa fa-angle-up" }
+                            }
+                        , Sl.button
+                            { onClick: capture_ $ setState $ _ { digits = state.digits - 1, count = 0 }
+                            , children: R.i { className: "fa fa-angle-down" }
+                            }
+                        ]
                     }
                 ]
             }
@@ -164,44 +170,42 @@ renderHeader { state, setState } =
         , Container.render
             { flex: Container.RowDense
             , fragment:
-                [ R.input
-                    { className: "w-24 p-2 text-right border border-secondary-500 rounded outline-none focus:ring"
+                [ Sl.input
+                    { className: "w-32 text-right"
                     , type: "number"
-                    , value: show state.lines
-                    , onChange:
+                    , value: show $ state.lines
+                    , onSlInput:
                         capture targetValue \x -> do
                           for_ (x >>= Int.fromString) \x' -> do
                             setState $ _ { lines = x', count = 0 }
                     }
-                , Button.render
-                    { icon: "fa fa-angle-up"
-                    , onClick: setState $ _ { lines = state.lines + 1, count = 0 }
-                    }
-                , Button.render
-                    { icon: "fa fa-angle-down"
-                    , onClick: setState $ _ { lines = state.lines - 1, count = 0 }
-                    }
-                ]
-            }
-        , Container.render
-            { flex: Container.RowDense
-            , fragment:
-                [ R.select
-                    { className: "p-2 border border-secondary-500 rounded outline-none focus:ring"
-                    , value: state.font
-                    , onChange:
-                        capture targetValue \x -> do
-                          for_ x \x' ->
-                            setState $ _ { font = x', count = 0 }
-                    , children:
-                        fonts
-                          <#> \{ label, value } ->
-                              R.option { label, value, children: pure $ R.text label }
+                , Sl.button_group
+                    { children:
+                        [ Sl.button
+                            { onClick: capture_ $ setState $ _ { lines = state.lines + 1, count = 0 }
+                            , children: R.i { className: "fa fa-angle-up" }
+                            }
+                        , Sl.button
+                            { onClick: capture_ $ setState $ _ { lines = state.lines - 1, count = 0 }
+                            , children: R.i { className: "fa fa-angle-down" }
+                            }
+                        ]
                     }
                 ]
             }
         , R.div { className: "flex-grow" }
-        , Value.render { text: show state.count }
+        , Sl.select
+            { value: state.font
+            , className: "w-48"
+            , onSlInput:
+                capture targetValue \x -> do
+                  for_ x \x' ->
+                    setState $ _ { font = x', count = 0 }
+            , children:
+                fonts
+                  <#> \{ label, value } ->
+                      Sl.option { label, value, children: [ R.text label ] }
+            }
         ]
     }
 

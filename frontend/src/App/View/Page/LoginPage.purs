@@ -1,7 +1,6 @@
 module App.View.Page.LoginPage where
 
 import AppViewPrelude
-import App.Context (context)
 import App.I18n.Ja as Ja
 import App.View.Agent.SessionsAgent (SessionsAgent)
 import App.View.Atom.Button as Button
@@ -36,7 +35,6 @@ make = do
 makeForm :: Component { sessions :: SessionsAgent }
 makeForm = do
   component "LoginForm" \{ sessions } -> React.do
-    { env} <- useContext context
     email /\ setEmail <- useState ""
     password /\ setPassword <- useState ""
     submitting /\ setSubmitting <- useState false
@@ -60,12 +58,10 @@ makeForm = do
                                 [ R.div
                                     { className: "flex-grow" }
                                 , Button.render
-                                    { type_: "submit"
-                                    , disabled: String.null email || String.null password
+                                    { disabled: String.null email || String.null password
                                     , loading: submitting
                                     , onClick: sessions.login { email, password }
                                     , text: Ja.login
-                                    , color: Button.Secondary
                                     }
                                 ]
                             }

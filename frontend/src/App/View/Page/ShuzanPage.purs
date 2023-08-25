@@ -12,6 +12,7 @@ import App.View.Atom.Value as Value
 import App.View.Helper.KeyboardShortcut (useKeyboardShortcut)
 import App.View.Skeleton.Single as Single
 import App.View.Organism.HeaderMenu as HeaderMenu
+import App.View.Sl as Sl
 import Data.Array as Array
 import Data.Formatter.Number (Formatter(..), format)
 import Data.Int as Int
@@ -136,12 +137,12 @@ makeAlpha =
                   , children:
                       pure
                         $ Button.render
-                            { color: Button.Primary
+                            { variant: Button.Primary
                             , icon: "fa fa-angle-left"
                             , bare: true
                             , textLeft: true
-                            , width: Button.Full
-                            , height: Button.Full
+                            , fullWidth: true
+                            , fullHeight: true
                             , onClick: rewind
                             }
                   }
@@ -150,29 +151,29 @@ makeAlpha =
                   , someWidth: true
                   , content:
                       fragment
-                        [ R.div
-                            { className: "w-full p-2 text-center text-primary-900 border-x-2 border-t-2 border-primary-700 bg-primary-200 rounded-t"
+                        [ Sl.card
+                            { className: "w-full"
                             , children:
-                                pure
-                                  $ R.text
-                                  $ show (state.index + 1)
-                                  <> " / "
-                                  <> show count
-                            }
-                        , R.div
-                            { className: "w-full border-x-2 border-b-2 border-primary-700 rounded-b " <> state.font
-                            , children:
-                                pure
-                                  $ Container.render
-                                      { flex: Container.ColNoGap
-                                      , padding: true
-                                      , fullHeight: true
-                                      , fragment:
-                                          [ fragment $ renderNumber <$> numbers
-                                          , R.hr { className: "border border-divider-500" }
-                                          , renderNumber $ foldl (+) 0 numbers
-                                          ]
-                                      }
+                                [ R.div
+                                    { slot: "header"
+                                    , className: "text-center"
+                                    , children: [ R.text $ show (state.index + 1) <> " / " <> show count ]
+                                    }
+                                , R.div
+                                    { className: "w-full " <> state.font
+                                    , children:
+                                        pure
+                                          $ Container.render
+                                              { flex: Container.ColNoGap
+                                              , fullHeight: true
+                                              , fragment:
+                                                  [ fragment $ renderNumber <$> numbers
+                                                  , R.hr { className: "border border-divider-500" }
+                                                  , renderNumber $ foldl (+) 0 numbers
+                                                  ]
+                                              }
+                                    }
+                                ]
                             }
                         ]
                   }
@@ -181,12 +182,12 @@ makeAlpha =
                   , children:
                       pure
                         $ Button.render
-                            { color: Button.Primary
+                            { variant: Button.Primary
                             , icon: "fa fa-angle-right"
                             , bare: true
                             , textRight: true
-                            , width: Button.Full
-                            , height: Button.Full
+                            , fullWidth: true
+                            , fullHeight: true
                             , onClick: proceed
                             }
                   }
@@ -208,29 +209,24 @@ renderHeader { state, setState } = do
       Container.render
         { flex: Container.Row
         , align: Container.AlignBaseline
+        , justify: Container.JustifyBetween
         , padding: true
         , fragment:
             [ R.div
                 { className: "text-secondary-700 text-xl"
                 , children: pure $ R.text $ (unwrap spec).label <> " " <> fst subject
                 }
-            , R.div { className: "flex-grow" }
-            , Container.render
-                { flex: Container.RowDense
-                , fragment:
-                    [ R.select
-                        { className: "p-2 border border-secondary-500 rounded outline-none focus:ring"
-                        , value: state.font
-                        , onChange:
-                            capture targetValue \x -> do
-                              for_ x \x' ->
-                                setState $ _ { font = x' }
-                        , children:
-                            fonts
-                              <#> \{ label, value } ->
-                                  R.option { label, value, children: pure $ R.text label }
-                        }
-                    ]
+            , Sl.select
+                { value: state.font
+                , className: "w-48"
+                , onSlInput:
+                    capture targetValue \x -> do
+                      for_ x \x' ->
+                        setState $ _ { font = x' }
+                , children:
+                    fonts
+                      <#> \{ label, value } ->
+                          Sl.option { label, value, children: [ R.text label ] }
                 }
             ]
         }

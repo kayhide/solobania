@@ -174,7 +174,7 @@ parseError :: Json -> Maybe String
 parseError body = hush $ (_ .: "error_message") =<< decodeJson body
 
 tokenKey :: String
-tokenKey = "token"
+tokenKey = "solobania-token"
 
 readToken :: Effect (Maybe Token)
 readToken = do

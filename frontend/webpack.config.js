@@ -1,3 +1,4 @@
+const CopyPlugin = require("copy-webpack-plugin");
 const HtmlPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
@@ -33,6 +34,18 @@ module.exports = {
         isDevServer ? "" : "-[contenthash:8]"
       }.chunk.css`,
       ignoreOrder: false,
+    }),
+    new CopyPlugin({
+      patterns: [
+        // Copy Shoelace assets to dist/shoelace
+        {
+          from: path.resolve(
+            __dirname,
+            "node_modules/@shoelace-style/shoelace/dist/assets"
+          ),
+          to: path.resolve(__dirname, "dist/shoelace/assets"),
+        },
+      ],
     }),
     new HtmlPlugin({
       filename: "index.html",

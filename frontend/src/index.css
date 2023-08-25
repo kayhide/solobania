@@ -44,3 +44,18 @@ body {
     content: "\200b";
   }
 }
+
+sl-button {
+  &.h-full::part(base) {
+    height: 100%;
+    @apply flex items-center;
+  }
+
+  &.text-left::part(base) {
+    @apply flex justify-start;
+  }
+
+  &.text-right::part(base) {
+    @apply flex justify-end;
+  }
+}

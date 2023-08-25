@@ -17,8 +17,16 @@
   ],
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.4",
-    "css-loader": "^6.5.1",
+    "@shoelace-style/shoelace": "^2.8.0",
     "decimal.js": "^10.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "url": "^0.11.0",
+    "xhr2": "^0.2.1"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^11.0.0",
+    "css-loader": "^6.5.1",
     "html-loader": "^3.1.0",
     "html-webpack-plugin": "^5.5.0",
     "http-server": "^14.1.0",
@@ -27,20 +35,14 @@
     "postcss-import": "^14.0.2",
     "postcss-loader": "^6.2.1",
     "precss": "^4.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "style-loader": "^3.3.1",
-    "tailwindcss": "^3.0.15",
-    "url": "^0.11.0",
-    "webpack": "^5.66.0",
-    "xhr2": "^0.2.1"
-  },
-  "devDependencies": {
     "prettier": "^2.5.1",
     "pscid": "^2.10.0",
     "purescript-language-server": "^0.17.1",
     "purescript-psa": "^0.8.2",
     "purty": "^7.0.0",
+    "style-loader": "^3.3.1",
+    "tailwindcss": "^3.0.15",
+    "webpack": "^5.66.0",
     "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.7.3"
   }
