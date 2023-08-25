@@ -1,4 +1,5 @@
 class Pack < ApplicationRecord
+  belongs_to :spec
   has_many :sheets, dependent: :destroy
 
   CATEGORIES = %w(shuzan anzan)
