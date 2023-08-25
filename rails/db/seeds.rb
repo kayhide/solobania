@@ -15,11 +15,17 @@ ENV.fetch("SEED_USERS") { "" }.split(";").each do |s|
   end
 end
 
-specs = open(Rails.root.join("db/specs.yaml"), &YAML.method(:load_file))
+src = Rails.root.join("db/specs.yaml")
+specs = open(src, &YAML.method(:load_file))
 specs.each do |key, attrs|
   spec = Spec.find_by(key: key)
   if spec
-    @shell.say_status :exist, "Spec #{spec.name} (#{spec.key})", :cyan
+    if src.mtime < spec.updated_at
+      @shell.say_status :exist, "Spec #{spec.name} (#{spec.key})", :cyan
+    else
+      spec.update body: attrs
+      @shell.say_status :update, "Spec #{spec.name} (#{spec.key})", :yellow
+    end
   else
     spec = Spec.create(key: key, name: attrs[:label], body: attrs)
     @shell.say_status :create, "Spec #{spec.name} (#{spec.key})", :green

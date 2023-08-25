@@ -2,47 +2,47 @@ shuzan-10:
   category: shuzan
   grade: 10
   grade_unit: kyu
-  label: "珠算 第10級"
+  name: "珠算 第10級"
   sheets:
     - name: "見取算A"
       timelimit: 7
       problem_type: mitorizan
       problems: 
-        - { positive: 1, count: 1 }
-        - { positive: 1, negative: 1, count: 1 }
-        - { positive: 1, count: 1 }
-        - { positive: 1, negative: 1, count: 1 }
-        - { positive: 1, count: 1 }
-        - { positive: 1, negative: 1, count: 1 }
-        - { positive: 1, count: 1 }
-        - { positive: 1, negative: 1, count: 1 }
-        - { positive: 1, count: 1 }
-        - { positive: 1, count: 1 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, count: 7 }
     - name: "見取算B"
       timelimit: 7
       problem_type: :mitorizan
       problems:
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, count: 1 }
-    - name: "見取算B"
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, count: 5 }
+    - name: "見取算C"
       timelimit: 7
       problem_type: :mitorizan
       problems:
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, negative: 1, count: 1 }
-        - { positive: 2, count: 1 }
-        - { positive: 2, count: 1 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, count: 5 }

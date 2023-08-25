@@ -1,5 +1,6 @@
 class MitorizanProblem < Problem
   def self.generate spec
+    spec = spec.symbolize_keys
     pos0, pos1 = spec[:positive]
     pos1 ||= pos0
     pos0 &&= 10 ** (pos0 - 1)
@@ -19,6 +20,6 @@ class MitorizanProblem < Problem
         end
       [[*ns, n], sum + n]
     end
-    new(body: { question:, answer: }, spec: spec)
+    new(count: spec[:count], body: { question:, answer: }, spec: spec)
   end
 end
