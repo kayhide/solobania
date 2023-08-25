@@ -37,7 +37,7 @@ get-dev-token: EMAIL ?= $(shell echo $$SEED_USERS | sed 's/^[^<]*<\([^>]*\).*/\1
 get-dev-token: PASSWORD ?= $(shell echo $$SEED_USERS | sed "s/^[^:]*:\([^<]*\).*/\1/")
 get-dev-token:
 	@curl --silent --request POST --header "Content-Type: application/json" \
-		--data '("email":"$(EMAIL)", "password":"$(PASSWORD)")' \
+		--data '{"email":"$(EMAIL)", "password":"$(PASSWORD)"}' \
 		'http://localhost:3000/api/auth' | \
 		jq -r .token
 .PHONY: get-dev-token
