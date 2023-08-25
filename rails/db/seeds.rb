@@ -14,3 +14,14 @@ ENV.fetch("SEED_USERS") { "" }.split(";").each do |s|
     @shell.say_status :create, "User #{username}<#{email}>", :green
   end
 end
+
+specs = open(Rails.root.join("db/specs.yaml"), &YAML.method(:load_file))
+specs.each do |key, attrs|
+  spec = Spec.find_by(key: key)
+  if spec
+    @shell.say_status :exist, "Spec #{spec.name} (#{spec.key})", :cyan
+  else
+    spec = Spec.create(key: key, name: attrs[:label], body: attrs)
+    @shell.say_status :create, "Spec #{spec.name} (#{spec.key})", :green
+  end
+end
