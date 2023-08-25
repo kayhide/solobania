@@ -9,7 +9,8 @@ class Pack < ApplicationRecord
   enum grade_unit: GRADE_UNITS.map { |x| [x, x] }.to_h
 
   def self.generate spec
-    self.new(spec.slice(*%i(category grade grade_unit))).tap do |pack|
+    spec = spec.symbolize_keys
+    self.new(spec.slice(*%i(category grade grade_unit name))).tap do |pack|
       pack.sheets = spec[:sheets].to_a.map(&Sheet.method(:generate))
     end
   end
