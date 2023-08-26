@@ -72,7 +72,7 @@ RSpec.describe Api::PacksController, type: :controller do
       )
       expect(body["sheets"].map { |x| x["problems"].length }).to eq [3, 3]
       expect(body["sheets"].flat_map { |x| x["problems"] }.map(&:keys)).to all match_array %w(
-        id sheet_id count body spec created_at updated_at
+        id sheet_id subject count body spec created_at updated_at
       )
     end
   end

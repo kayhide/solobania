@@ -42,7 +42,15 @@ class Api::PacksController < ApplicationController
   end
 
   def show_attributes item
-    sheets = item.sheets.map { |sheet| sheet.attributes.merge(problems: sheet.problems(&:attributes)) }
+    sheets = item.sheets.map do |sheet|
+      problems = sheet.problems.map do |problem|
+        problem
+          .attributes
+          .except(*%w(type))
+          .merge(subject: problem.type.to_s.delete_suffix("Problem"))
+      end
+      sheet.attributes.merge(problems:)
+    end
     item.attributes.merge(sheets:)
   end
 end
