@@ -1,9 +1,7 @@
 module App.View.Page.PackPage where
 
 import AppViewPrelude
-import App.Data (toId)
-import App.Data.Route (navigate)
-import App.Data.Route as Route
+import App.Context (context)
 import App.Data.Pack (Pack, PackId)
 import App.View.Agent.PacksAgent (usePacksAgent)
 import App.View.Atom.Button as Button
@@ -14,12 +12,10 @@ import App.View.Helper.KeyboardShortcut (useKeyboardShortcut)
 import App.View.Skeleton.Single as Single
 import App.View.Organism.HeaderMenu as HeaderMenu
 import App.View.Sl as Sl
-import Data.Array as Array
 import Data.Formatter.Number (Formatter(..), format)
 import Data.Int as Int
 import Data.Lens (_Just, to)
 import Data.Lens.Index (ix)
-import Data.Monoid as Monoid
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
 
@@ -30,7 +26,6 @@ type State
   = { pack :: Maybe Pack
     , sheetIndex :: Int
     , problemIndex :: Int
-    , font :: String
     }
 
 type ChildProps
@@ -53,7 +48,6 @@ make = do
         { pack: Nothing
         , sheetIndex: 0
         , problemIndex: 0
-        , font: "font-caveat"
         }
     useEffect packId do
       packs.loadOne packId
@@ -78,6 +72,7 @@ fmt = Formatter { comma: true, before: 0, after: 0, abbreviations: false, sign: 
 makeAlpha :: Component ChildProps
 makeAlpha =
   component "Alpha" \{ state, setState } -> React.do
+    { font } <- useContext context
     let
       currentSheet = state.pack ^? _Just <<< to (unwrap >>> _.sheets) <<< ix state.sheetIndex
 
@@ -104,10 +99,9 @@ makeAlpha =
             setState $ _ { sheetIndex = state.sheetIndex - 1, problemIndex = problemIndex }
         true -> setState $ _ { problemIndex = state.problemIndex - 1 }
 
-      proceed =
-        case state.problemIndex < count - 1 of
-          false -> setState $ _ { sheetIndex = state.sheetIndex + 1, problemIndex = 0 }
-          true -> setState $ _ { problemIndex = state.problemIndex + 1 }
+      proceed = case state.problemIndex < count - 1 of
+        false -> setState $ _ { sheetIndex = state.sheetIndex + 1, problemIndex = 0 }
+        true -> setState $ _ { problemIndex = state.problemIndex + 1 }
     shortcut <- useKeyboardShortcut
     useEffect (currentProblem /\ state.problemIndex) do
       shortcut.register "Backspace" rewind
@@ -157,7 +151,7 @@ makeAlpha =
                                     , children: [ R.text $ show (state.problemIndex + 1) <> " / " <> show count ]
                                     }
                                 , R.div
-                                    { className: "w-full " <> state.font
+                                    { className: "w-full " <> font.current
                                     , children:
                                         pure
                                           $ Container.render
@@ -212,28 +206,5 @@ renderHeader { state, setState } = do
                   { className: "text-secondary-700 text-xl"
                   , children: pure $ R.text $ (unwrap pack).name <> " " <> (unwrap sheet).name
                   }
-              , Sl.select
-                  { value: state.font
-                  , className: "w-48"
-                  , onSlInput:
-                      capture targetValue \x -> do
-                        for_ x \x' ->
-                          setState $ _ { font = x' }
-                  , children:
-                      fonts
-                        <#> \{ label, value } ->
-                            Sl.option { label, value, children: [ R.text label ] }
-                  }
               ]
           }
-
-fonts ::
-  Array
-    { label :: String
-    , value :: String
-    }
-fonts =
-  [ { label: "Caveat", value: "font-caveat" }
-  , { label: "Damion", value: "font-damion" }
-  , { label: "Short Stack", value: "font-short-stack" }
-  ]

@@ -11,6 +11,7 @@ import App.View.Page.PackPage as PackPage
 import App.View.Page.ShuzanPage as ShuzanPage
 import App.Env (Env)
 import App.Context (context)
+import App.View.Agent.FontAgent (useFontAgent)
 import App.View.Agent.NotificationAgent (useNotificationAgent)
 import App.View.Agent.SessionsAgent (useSessionsAgent)
 import React.Basic.Hooks (provider)
@@ -30,6 +31,7 @@ make env = do
     notifier <- useNotificationAgent
     sessions <- useSessionsAgent env notifier
     store <- useStoreAgent
+    font <- useFontAgent
     movingTo /\ setMovingTo <- useState (Nothing :: Maybe Route)
     let
       currentProfile = { user: _ } <$> sessions.user
@@ -53,7 +55,7 @@ make env = do
       pure $ pure unit
     pure $ sessions.isReady
       # bool mempty do
-          provider context { env, notifier, route, currentProfile, store }
+          provider context { env, notifier, route, currentProfile, store, font }
             [ case route of
                 Route.Home -> authorize $ homePage {}
                 Route.Login -> authorize $ mempty

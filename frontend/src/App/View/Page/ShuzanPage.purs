@@ -1,8 +1,7 @@
 module App.View.Page.ShuzanPage where
 
 import AppViewPrelude
-import App.Data.Route (navigate)
-import App.Data.Route as Route
+import App.Context (context)
 import App.Soloban (Problem(..), Spec, generate, problemCount)
 import App.Soloban as Soloban
 import App.View.Atom.Button as Button
@@ -13,12 +12,10 @@ import App.View.Helper.KeyboardShortcut (useKeyboardShortcut)
 import App.View.Skeleton.Single as Single
 import App.View.Organism.HeaderMenu as HeaderMenu
 import App.View.Sl as Sl
-import Data.Array as Array
 import Data.Formatter.Number (Formatter(..), format)
 import Data.Int as Int
 import Data.Lens (_Just, to)
 import Data.Lens.Index (ix)
-import Data.Monoid as Monoid
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
 
@@ -30,7 +27,6 @@ type State
     , problems :: Array Problem
     , subjectIndex :: Int
     , index :: Int
-    , font :: String
     }
 
 type ChildProps
@@ -53,7 +49,6 @@ make = do
         , problems: []
         , subjectIndex: 0
         , index: 0
-        , font: "font-caveat"
         }
     useEffect key do
       setState $ emptifyState >>> _ { spec = Soloban.store ^? ix ("shuzan-" <> key) }
@@ -82,6 +77,7 @@ fmt = Formatter { comma: true, before: 0, after: 0, abbreviations: false, sign: 
 makeAlpha :: Component ChildProps
 makeAlpha =
   component "Alpha" \{ state, setState } -> React.do
+    { font } <- useContext context
     let
       currentProblem = state.problems ^? ix state.subjectIndex
 
@@ -150,32 +146,30 @@ makeAlpha =
                   { shrink: false
                   , someWidth: true
                   , content:
-                      fragment
-                        [ Sl.card
-                            { className: "w-full"
-                            , children:
-                                [ R.div
-                                    { slot: "header"
-                                    , className: "text-center"
-                                    , children: [ R.text $ show (state.index + 1) <> " / " <> show count ]
-                                    }
-                                , R.div
-                                    { className: "w-full " <> state.font
-                                    , children:
-                                        pure
-                                          $ Container.render
-                                              { flex: Container.ColNoGap
-                                              , fullHeight: true
-                                              , fragment:
-                                                  [ fragment $ renderNumber <$> numbers
-                                                  , R.hr { className: "border border-divider-500" }
-                                                  , renderNumber $ foldl (+) 0 numbers
-                                                  ]
-                                              }
-                                    }
-                                ]
-                            }
-                        ]
+                      Sl.card
+                        { className: "w-full"
+                        , children:
+                            [ R.div
+                                { slot: "header"
+                                , className: "text-center"
+                                , children: [ R.text $ show (state.index + 1) <> " / " <> show count ]
+                                }
+                            , R.div
+                                { className: "w-full " <> font.current
+                                , children:
+                                    pure
+                                      $ Container.render
+                                          { flex: Container.ColNoGap
+                                          , fullHeight: true
+                                          , fragment:
+                                              [ fragment $ renderNumber <$> numbers
+                                              , R.hr { className: "border border-divider-500" }
+                                              , renderNumber $ foldl (+) 0 numbers
+                                              ]
+                                          }
+                                }
+                            ]
+                        }
                   }
               , R.div
                   { className: "flex-1"
@@ -200,7 +194,7 @@ type HeaderProps
     }
 
 renderHeader :: HeaderProps -> JSX
-renderHeader { state, setState } = do
+renderHeader { state } = do
   let
     currentSubject = state.spec ^? _Just <<< to unwrap <<< to _.subjects <<< ix state.subjectIndex
   case { spec: _, subject: _ } <$> state.spec <*> currentSubject of
@@ -216,28 +210,5 @@ renderHeader { state, setState } = do
                 { className: "text-secondary-700 text-xl"
                 , children: pure $ R.text $ (unwrap spec).label <> " " <> fst subject
                 }
-            , Sl.select
-                { value: state.font
-                , className: "w-48"
-                , onSlInput:
-                    capture targetValue \x -> do
-                      for_ x \x' ->
-                        setState $ _ { font = x' }
-                , children:
-                    fonts
-                      <#> \{ label, value } ->
-                          Sl.option { label, value, children: [ R.text label ] }
-                }
             ]
         }
-
-fonts ::
-  Array
-    { label :: String
-    , value :: String
-    }
-fonts =
-  [ { label: "Caveat", value: "font-caveat" }
-  , { label: "Damion", value: "font-damion" }
-  , { label: "Short Stack", value: "font-short-stack" }
-  ]

@@ -7,6 +7,7 @@ import App.I18n.Ja as Ja
 import App.View.Atom.Container as Container
 import App.View.Atom.MenuItem as MenuItem
 import App.View.Molecule.Dropdown as Dropdown
+import App.View.Molecule.FontPicker as FontPicker
 import Data.Monoid as Monoid
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
@@ -48,6 +49,7 @@ make = do
                         , R.div
                             { className: "flex-grow"
                             }
+                        , FontPicker.render {}
                         , Container.render
                             { flex: Container.Row
                             , align: Container.AlignCenter

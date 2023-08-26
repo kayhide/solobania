@@ -6,6 +6,7 @@ import App.Data.User (User)
 import App.Env (Env)
 import App.Notification (Notifier)
 import App.Store (Store)
+import App.Font (Font)
 import React.Basic.Hooks (ReactContext, createContext)
 
 type Profile
@@ -18,6 +19,7 @@ type ContextRecord
     , route :: Route
     , currentProfile :: Maybe Profile
     , store :: Store
+    , font :: Font
     }
 
 -- | Context holds data which is widely refered to among components.

@@ -1,6 +1,7 @@
 module App.View.Page.MitorizanPage where
 
 import AppViewPrelude
+import App.Context (context)
 import App.View.Organism.HeaderMenu as HeaderMenu
 import App.View.Atom.Button as Button
 import App.View.Atom.Container as Container
@@ -24,7 +25,6 @@ type State
   = { digits :: Int
     , lines :: Int
     , count :: Int
-    , font :: String
     }
 
 type ChildProps
@@ -38,7 +38,7 @@ make = do
   header <- HeaderMenu.make
   alpha <- makeAlpha
   component "MitorizanPage" \_ -> React.do
-    state /\ setState <- useState { digits: 4, lines: 10, count: 0, font: "font-caveat" }
+    state /\ setState <- useState { digits: 4, lines: 10, count: 0 }
     pure
       $ skeleton
           { layout: Single.Wide
@@ -56,6 +56,7 @@ fmt = Formatter { comma: true, before: 0, after: 0, abbreviations: false, sign: 
 makeAlpha :: Component ChildProps
 makeAlpha =
   component "Alpha" \{ state, setState } -> React.do
+    { font } <- useContext context
     numbers /\ setNumbers <- useState ([] :: Array Int)
     generating /\ setGenerating <- useState false
     shortcut <- useKeyboardShortcut
@@ -91,7 +92,7 @@ makeAlpha =
                           { grow: true
                           , content:
                               R.div
-                                { className: "w-80 mx-auto border-2 border-primary-700 rounded " <> state.font
+                                { className: "w-80 mx-auto border-2 border-primary-700 rounded " <> font.current
                                 , children:
                                     pure
                                       $ Container.render
@@ -115,7 +116,7 @@ makeAlpha =
                   ]
               }
           , R.div
-              { className: "absolute top-0 right-0 mx-16 my-8 text-4xl " <> state.font
+              { className: "absolute top-0 right-0 mx-16 text-4xl " <> font.current
               , children: [ R.text $ show state.count ]
               }
           ]
@@ -193,25 +194,5 @@ renderHeader { state, setState } =
                     }
                 ]
             }
-        , R.div { className: "flex-grow" }
-        , Sl.select
-            { value: state.font
-            , className: "w-48"
-            , onSlInput:
-                capture targetValue \x -> do
-                  for_ x \x' ->
-                    setState $ _ { font = x', count = 0 }
-            , children:
-                fonts
-                  <#> \{ label, value } ->
-                      Sl.option { label, value, children: [ R.text label ] }
-            }
         ]
     }
-
-fonts :: Array _
-fonts =
-  [ { label: "Caveat", value: "font-caveat" }
-  , { label: "Damion", value: "font-damion" }
-  , { label: "Short Stack", value: "font-short-stack" }
-  ]
