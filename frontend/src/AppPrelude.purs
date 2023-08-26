@@ -5,6 +5,7 @@ module AppPrelude
   , module Control.Monad.Reader
   , module Control.Monad.Rec.Class
   , module Control.Plus
+  , module Control.Monad.Writer
   , module Data.Argonaut
   , module Data.Array.NonEmpty
   , module Data.Bifunctor
@@ -25,6 +26,7 @@ module AppPrelude
   , module Data.Newtype
   , module Data.NonEmpty
   , module Data.Nullable
+  , module Data.Ord.Generic
   , module Data.Profunctor.Strong
   , module Data.Semigroup.Generic
   , module Data.Set
@@ -44,13 +46,11 @@ module AppPrelude
   , module Effect.Exception
   , module Effect.Unsafe
   , module Foreign.Object
+  , module Safe.Coerce
   , module Type.Proxy
   , module Unsafe.Coerce
   , bool
   , mmap
-  , rewrap
-  , throwOnLeft
-  , throwOnNothing
   ) where
 
 import Prelude
@@ -59,12 +59,13 @@ import Control.Alternative (guard)
 import Control.Monad.Reader (class MonadAsk, ReaderT, ask, asks, runReaderT)
 import Control.Monad.Rec.Class (forever, whileJust, untilJust)
 import Control.Plus (class Plus, empty)
+import Control.Monad.Writer (Writer, tell, execWriter)
 import Data.Argonaut (class DecodeJson, class EncodeJson, Json, jsonEmptyObject, jsonEmptyArray, jsonEmptyString, jsonParser, encodeJson, decodeJson)
 import Data.Array.NonEmpty (NonEmptyArray)
 import Data.Bifunctor (bimap, lmap, rmap)
 import Data.Either (Either(..), either, hush, isLeft, isRight, note)
 import Data.Either.Nested (type (\/), (\/), in1, in2, in3, in4)
-import Data.Enum(succ, pred, toEnum, fromEnum)
+import Data.Enum (class Enum, class BoundedEnum, succ, pred, toEnum, fromEnum)
 import Data.Eq.Generic (genericEq)
 import Data.Filterable (compact, filter, filterMap, partition, partitionMap, eitherBool, maybeBool)
 import Data.Foldable (class Foldable, all, and, any, elem, find, findMap, fold, foldM, foldl, foldr, foldMap, intercalate, length, maximum, maximumBy, minimum, minimumBy, notElem, or)
@@ -79,7 +80,8 @@ import Data.Monoid as Monoid
 import Data.Monoid.Generic (genericMempty)
 import Data.Newtype (class Newtype, wrap, unwrap)
 import Data.NonEmpty (NonEmpty, (:|), fromNonEmpty)
-import Data.Nullable (null, notNull, toNullable)
+import Data.Nullable (Nullable, null, notNull, toNullable)
+import Data.Ord.Generic (genericCompare)
 import Data.Profunctor.Strong ((***), (&&&))
 import Data.Semigroup.Generic (genericAppend)
 import Data.Set (Set)
@@ -88,7 +90,7 @@ import Data.String.NonEmpty (NonEmptyString)
 import Data.Symbol (class IsSymbol, reflectSymbol)
 import Data.Traversable (class Traversable, for, for_, sequence, sequence_, traverse, traverse_)
 import Data.TraversableWithIndex (class TraversableWithIndex, forWithIndex, traverseWithIndex)
-import Data.Tuple (curry, fst, snd, uncurry)
+import Data.Tuple (curry, fst, snd, swap, uncurry)
 import Data.Tuple.Nested (type (/\), (/\))
 import Data.Unfoldable (class Unfoldable, unfoldr, replicate, replicateA)
 import Debug (trace, traceM, spy, spyWith)
@@ -99,6 +101,7 @@ import Effect.Class (class MonadEffect, liftEffect)
 import Effect.Exception (throw)
 import Effect.Unsafe (unsafePerformEffect)
 import Foreign.Object (Object)
+import Safe.Coerce (coerce)
 import Type.Proxy (Proxy(..))
 import Unsafe.Coerce (unsafeCoerce)
 
@@ -107,12 +110,3 @@ bool x y b = if b then y else x
 
 mmap :: forall a b. Monoid a => Monoid b => Eq a => (a -> b) -> a -> b
 mmap f x = Monoid.guard (x /= mempty) $ f x
-
-rewrap :: forall t s a. Newtype t a => Newtype s a => t -> s
-rewrap = unsafeCoerce
-
-throwOnNothing :: forall a m. MonadEffect m => String -> Maybe a -> m a
-throwOnNothing msg = throwOnLeft <<< note msg
-
-throwOnLeft :: forall a m. MonadEffect m => Either String a -> m a
-throwOnLeft = either (liftEffect <<< throw) pure

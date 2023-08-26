@@ -54,6 +54,7 @@ to generate this file without the comments in this block.
   , "record"
   , "routing"
   , "routing-duplex"
+  , "safe-coerce"
   , "strings"
   , "tailrec"
   , "transformers"

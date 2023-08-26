@@ -4,10 +4,11 @@ import AppViewPrelude
 import App.Data.Route (Route, routeCodec, navigate)
 import App.Data.Route as Route
 import App.View.Agent.StoreAgent (useStoreAgent)
-import App.View.Page.MitorizanPage as MitorizanPage
-import App.View.Page.ShuzanPage as ShuzanPage
 import App.View.Page.HomePage as HomePage
 import App.View.Page.LoginPage as LoginPage
+import App.View.Page.MitorizanPage as MitorizanPage
+import App.View.Page.PackPage as PackPage
+import App.View.Page.ShuzanPage as ShuzanPage
 import App.Env (Env)
 import App.Context (context)
 import App.View.Agent.NotificationAgent (useNotificationAgent)
@@ -23,6 +24,7 @@ make env = do
   loginPage <- LoginPage.make
   mitorizanPage <- MitorizanPage.make
   shuzanPage <- ShuzanPage.make
+  packPage <- PackPage.make
   component "Router" \_ -> React.do
     route /\ setRoute <- useState Route.Home
     notifier <- useNotificationAgent
@@ -54,8 +56,9 @@ make env = do
           provider context { env, notifier, route, currentProfile, store }
             [ case route of
                 Route.Home -> authorize $ homePage {}
-                Route.Mitorizan -> authorize $ mitorizanPage {}
-                Route.Shuzan key -> authorize $ shuzanPage { key }
                 Route.Login -> authorize $ mempty
                 Route.Logout -> mempty
+                Route.Mitorizan -> authorize $ mitorizanPage {}
+                Route.Shuzan key -> authorize $ shuzanPage { key }
+                Route.Pack packId -> authorize $ packPage { packId }
             ]

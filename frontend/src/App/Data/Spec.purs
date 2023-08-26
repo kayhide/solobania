@@ -1,23 +1,12 @@
-module App.Data.Spec where
+module App.Data.Spec
+  ( Spec(..)
+  , module App.Data.Id
+  ) where
 
 import AppPrelude
+import App.Data.Id (SpecId)
 import App.Data.DateTime (decodeTimestamps, encodeTimestamps)
 import Data.DateTime (DateTime)
-
-newtype SpecId
-  = SpecId Int
-
-derive instance newtypeSpecId :: Newtype SpecId _
-
-derive newtype instance eqSpecId :: Eq SpecId
-
-derive newtype instance ordSpecId :: Ord SpecId
-
-derive newtype instance showSpecId :: Show SpecId
-
-derive newtype instance encodeJsonSpecId :: EncodeJson SpecId
-
-derive newtype instance decodeJsonSpecId :: DecodeJson SpecId
 
 newtype Spec
   = Spec
