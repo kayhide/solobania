@@ -8,7 +8,7 @@ import App.View.Atom.Container as Container
 import App.View.Atom.Scroller as Scroller
 import App.View.Helper.KeyboardShortcut (useKeyboardShortcut)
 import App.View.Organism.HeaderMenu as HeaderMenu
-import App.View.Organism.MitorizanPanel as MitorizanPanel
+import App.View.Organism.ProblemPanel as ProblemPanel
 import App.View.Skeleton.Single as Single
 import Data.Lens (_Just, to)
 import Data.Lens.Index (ix)
@@ -121,11 +121,10 @@ makeAlpha =
                                   , onClick: rewind
                                   }
                         }
-                    , Scroller.render
-                        { shrink: false
-                        , someWidth: true
+                    , Container.render
+                        { someWidth: true
                         , content:
-                            MitorizanPanel.render
+                            ProblemPanel.render
                               { problem
                               , title: show (state.problemIndex + 1) <> " / " <> show count
                               }

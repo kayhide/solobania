@@ -3,7 +3,41 @@ module App.Data.Problem where
 import AppPrelude
 import App.Data.Id (ProblemId, SheetId)
 import App.Data.DateTime (decodeTimestamps, encodeTimestamps)
+import Data.Argonaut as Argonaut
 import Data.DateTime (DateTime)
+
+data Subject
+  = Mitorizan
+  | Kakezan
+  | Warizan
+
+derive instance genericSubject :: Generic Subject _
+
+derive instance eqSubject :: Eq Subject
+
+derive instance ordSubject :: Ord Subject
+
+instance showSubject :: Show Subject where
+  show = genericShow
+
+instance encodeJsonSubject :: EncodeJson Subject where
+  encodeJson = case _ of
+    Mitorizan -> encodeJson "Mitorizan"
+    Kakezan -> encodeJson "Kakezan"
+    Warizan -> encodeJson "Warizan"
+
+instance decodeJsonSubject :: DecodeJson Subject where
+  decodeJson json = do
+    decodeJson json
+      >>= parseSubject
+      >>> lmap (const $ Argonaut.UnexpectedValue json)
+
+parseSubject :: String -> Either String Subject
+parseSubject = case _ of
+  "Mitorizan" -> pure Mitorizan
+  "Kakezan" -> pure Kakezan
+  "Warizan" -> pure Warizan
+  v -> Left $ "Not a Subject: " <> v
 
 newtype Body
   = Body
@@ -29,6 +63,7 @@ newtype Problem
   = Problem
   { id :: ProblemId
   , sheet_id :: SheetId
+  , subject :: Subject
   , count :: Int
   , body :: Body
   , created_at :: DateTime

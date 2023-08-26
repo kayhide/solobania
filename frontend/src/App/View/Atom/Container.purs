@@ -56,6 +56,7 @@ type PropsRowOptional
     , padding :: Boolean
     , fullHeight :: Boolean
     , fullWidth :: Boolean
+    , someWidth :: Boolean
     , nonInteractive :: Boolean
     , position :: AbsolutePosition
     , visible :: Boolean
@@ -77,6 +78,7 @@ def =
   , padding: false
   , fullHeight: false
   , fullWidth: false
+  , someWidth: false
   , nonInteractive: false
   , position: unsafeCoerce unit
   , visible: unsafeCoerce unit
@@ -100,6 +102,7 @@ render props = do
     , padding
     , fullHeight
     , fullWidth
+    , someWidth
     , nonInteractive
     } = Record.merge props def :: Props
 
@@ -190,6 +193,7 @@ render props = do
           <> bool "" " p-4" padding
           <> bool "" " h-full" fullHeight
           <> bool "" " w-full" fullWidth
+          <> bool "" " w-64" someWidth
           <> bool "" " pointer-events-none" nonInteractive
     , children:
         [ content ]

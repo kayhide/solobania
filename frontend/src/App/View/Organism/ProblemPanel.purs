@@ -1,8 +1,8 @@
-module App.View.Organism.MitorizanPanel where
+module App.View.Organism.ProblemPanel where
 
 import AppViewPrelude
 import App.Context (context)
-import App.Data.Problem (Problem)
+import App.Data.Problem (Problem, Subject(..))
 import App.View.Atom.Container as Container
 import App.View.Atom.Value as Value
 import App.View.Sl as Sl
@@ -34,9 +34,12 @@ fmt :: Formatter
 fmt = Formatter { comma: true, before: 0, after: 0, abbreviations: false, sign: false }
 
 renderNumber :: Int -> JSX
-renderNumber n =
+renderNumber = renderToken <<< format fmt <<< Int.toNumber
+
+renderToken :: String -> JSX
+renderToken text =
   Value.render
-    { text: format fmt $ Int.toNumber n
+    { text
     , dense: true
     , huge: true
     , justify: Value.JustifyRight
@@ -58,7 +61,37 @@ make = do
       , title
       } = Record.merge props def :: Props
     let
-      numbers = problem # unwrap >>> _.body >>> unwrap >>> _.question
+      { subject, body } = unwrap problem
+
+      { question, answer } = unwrap body
+
+      renderBody = case subject of
+        Mitorizan ->
+          Container.render
+            { flex: Container.ColNoGap
+            , fullHeight: true
+            , fragment:
+                [ fragment $ renderNumber <$> question
+                , R.hr { className: "border border-divider-500" }
+                , renderNumber answer
+                ]
+            }
+        Kakezan ->
+          Container.render
+            { flex: Container.RowDense
+            , fullHeight: true
+            , fragment:
+                intercalate [ renderToken "×" ] (pure <<< renderNumber <$> question)
+                  <> [ renderToken "=", renderNumber answer ]
+            }
+        Warizan ->
+          Container.render
+            { flex: Container.RowDense
+            , fullHeight: true
+            , fragment:
+                intercalate [ renderToken "÷" ] (pure <<< renderNumber <$> question)
+                  <> [ renderToken "=", renderNumber answer ]
+            }
     pure
       $ Sl.card
           { className: "w-full"
@@ -70,17 +103,7 @@ make = do
                   }
               , R.div
                   { className: "w-full " <> font.current
-                  , children:
-                      pure
-                        $ Container.render
-                            { flex: Container.ColNoGap
-                            , fullHeight: true
-                            , fragment:
-                                [ fragment $ renderNumber <$> numbers
-                                , R.hr { className: "border border-divider-500" }
-                                , renderNumber $ foldl (+) 0 numbers
-                                ]
-                            }
+                  , children: pure $ renderBody
                   }
               ]
           }

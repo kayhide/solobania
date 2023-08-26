@@ -9,7 +9,6 @@ import AppPrelude
 import App.Data.Id (PackId)
 import App.Data.Sheet (Sheet)
 import App.Data.DateTime (decodeTimestamps, encodeTimestamps)
-import Data.Argonaut (class DecodeJson, class EncodeJson, decodeJson, encodeJson)
 import Data.Argonaut as Argonaut
 import Data.DateTime (DateTime)
 
