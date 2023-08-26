@@ -193,7 +193,7 @@ render props = do
           <> bool "" " p-4" padding
           <> bool "" " h-full" fullHeight
           <> bool "" " w-full" fullWidth
-          <> bool "" " w-64" someWidth
+          <> bool "" " w-64 min-w-min" someWidth
           <> bool "" " pointer-events-none" nonInteractive
     , children:
         [ content ]
