@@ -1,3 +1,56 @@
+shuzan-09:
+  category: shuzan
+  grade: 9
+  grade_unit: kyu
+  name: "珠算 第9級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+        - { numbers: [2, 1] }
+    - name: "見取算A"
+      timelimit: 7
+      problem_type: :mitorizan
+      problems:
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+    - name: "見取算B"
+      timelimit: 7
+      problem_type: :mitorizan
+      problems:
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
 shuzan-10:
   category: shuzan
   grade: 10
@@ -46,3 +99,4 @@ shuzan-10:
         - { positive: 2, negative: 1, count: 5 }
         - { positive: 2, count: 5 }
         - { positive: 2, count: 5 }
+

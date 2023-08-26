@@ -27,7 +27,7 @@ specs.each do |key, attrs|
       @shell.say_status :update, "Spec #{spec.name} (#{spec.key})", :yellow
     end
   else
-    spec = Spec.create(key: key, name: attrs[:label], body: attrs)
+    spec = Spec.create(key: key, name: attrs['name'], body: attrs)
     @shell.say_status :create, "Spec #{spec.name} (#{spec.key})", :green
   end
 end
