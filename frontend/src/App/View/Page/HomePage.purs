@@ -4,6 +4,7 @@ import AppViewPrelude
 import App.Data (toId)
 import App.Data.Route (navigate)
 import App.Data.Route as Route
+import App.Data.Spec (Spec)
 import App.View.Agent.PacksAgent (usePacksAgent)
 import App.View.Agent.SpecsAgent (useSpecsAgent)
 import App.View.Atom.Button as Button
@@ -42,37 +43,42 @@ makeAlpha :: Component ChildProps
 makeAlpha =
   component "Alpha" \_ -> React.do
     specs <- useSpecsAgent
-    packs <- usePacksAgent
     useEffect unit do
       specs.load
       pure $ pure unit
-    useEffect packs.createdItem do
-      for_ packs.createdItem \pack' -> do
-        navigate $ Route.Pack (toId pack')
-      pure $ pure unit
-    let
-      renderSpec spec = do
-        let
-          { id, name } = unwrap spec
-        R.div
-          { className: "p-2 w-1/4"
-          , children:
-              [ Button.render
-                  { text: name
-                  , loading: packs.isLoading
-                  , fullWidth: true
-                  , onClick:
-                      do
-                        packs.setSpecId id
-                        packs.create $ wrap unit
-                  }
-              ]
-          }
     pure
       $ Container.render
           { flex: Container.RowWrapping
           , position: Container.Fill
+          , loading: specs.isLoading
           , fragment:
               renderSpec
                 <$> specs.items
           }
+
+renderSpec :: Spec -> JSX
+renderSpec =
+  unsafePerformEffect
+    $ component "Spec" \spec -> React.do
+        packs <- usePacksAgent
+        useEffect packs.createdItem do
+          for_ packs.createdItem \pack' -> do
+            navigate $ Route.Pack (toId pack')
+          pure $ pure unit
+        let
+          { id, name } = unwrap spec
+        pure
+          $ R.div
+              { className: "p-2 w-1/4"
+              , children:
+                  [ Button.render
+                      { text: name
+                      , loading: packs.isSubmitting
+                      , fullWidth: true
+                      , onClick:
+                          do
+                            packs.setSpecId id
+                            packs.create $ wrap unit
+                      }
+                  ]
+              }

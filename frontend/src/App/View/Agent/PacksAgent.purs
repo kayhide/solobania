@@ -39,15 +39,9 @@ usePacksAgent =
       store = ctx.store.packs
     ids /\ setIds <- useState ([] :: Array PackId)
     totalCount /\ setTotalCount <- useState (Nothing :: Maybe Int)
-    specId /\ setSpecId <- useState (Nothing :: Maybe SpecId)
     listApi <- useListApi (Proxy :: _ Pack) (Proxy :: _ "packs") api.list
     showApi <- useShowApi (Proxy :: _ Pack) (Proxy :: _ "packs") api.show
     createApi <- useCreateApi (Proxy :: _ Pack) (Proxy :: _ "packs") api.create
-    useEffect specId do
-      for_ specId \specId' -> do
-        listApi.setScope specId'
-        createApi.setScope specId'
-      pure $ pure unit
     useEffect listApi.ids do
       setIds $ const listApi.ids
       pure $ pure unit
@@ -69,7 +63,10 @@ usePacksAgent =
       , isPartiallyLoaded: listApi.isPartiallyLoaded
       , isNextLoading: listApi.isNextLoading
       , isSubmitting: createApi.isSubmitting
-      , setSpecId: setSpecId <<< const <<< Just
+      , setSpecId:
+          \id' -> do
+            listApi.setScope id'
+            createApi.setScope id'
       , updateRange: listApi.updateRange
       , load: listApi.load
       , loadNext: listApi.loadNext
