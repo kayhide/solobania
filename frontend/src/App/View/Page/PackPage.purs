@@ -1,19 +1,15 @@
 module App.View.Page.PackPage where
 
 import AppViewPrelude
-import App.Context (context)
 import App.Data.Pack (Pack, PackId)
 import App.View.Agent.PacksAgent (usePacksAgent)
 import App.View.Atom.Button as Button
 import App.View.Atom.Container as Container
 import App.View.Atom.Scroller as Scroller
-import App.View.Atom.Value as Value
 import App.View.Helper.KeyboardShortcut (useKeyboardShortcut)
-import App.View.Skeleton.Single as Single
 import App.View.Organism.HeaderMenu as HeaderMenu
-import App.View.Sl as Sl
-import Data.Formatter.Number (Formatter(..), format)
-import Data.Int as Int
+import App.View.Organism.MitorizanPanel as MitorizanPanel
+import App.View.Skeleton.Single as Single
 import Data.Lens (_Just, to)
 import Data.Lens.Index (ix)
 import React.Basic.DOM as R
@@ -66,56 +62,42 @@ make = do
           , alpha: alpha { state, setState }
           }
 
-fmt :: Formatter
-fmt = Formatter { comma: true, before: 0, after: 0, abbreviations: false, sign: false }
-
 makeAlpha :: Component ChildProps
 makeAlpha =
   component "Alpha" \{ state, setState } -> React.do
-    { font } <- useContext context
     let
-      currentSheet = state.pack ^? _Just <<< to (unwrap >>> _.sheets) <<< ix state.sheetIndex
+      sheets = state.pack ^. _Just <<< to (unwrap >>> _.sheets)
 
-      currentProblem = currentSheet ^? _Just <<< to (unwrap >>> _.problems) <<< ix state.problemIndex
+      currentSheet = sheets ^? ix state.sheetIndex
 
-      numbers /\ count =
-        fromMaybe ([] /\ 0) do
-          sheet <- currentSheet
-          problem <- currentProblem
-          pure $ (problem # unwrap >>> _.body >>> unwrap >>> _.question) /\ length (unwrap sheet).problems
+      problems = currentSheet ^. _Just <<< to (unwrap >>> _.problems)
 
-      rewind = case 0 < state.problemIndex of
-        false -> case 0 < state.sheetIndex of
-          false -> pure unit
-          true -> do
-            let
-              prevSheet = state.pack ^? _Just <<< to (unwrap >>> _.sheets) <<< ix (state.sheetIndex - 1)
+      currentProblem = problems ^? ix state.problemIndex
 
-              problemIndex =
-                fromMaybe 0
-                  $ prevSheet
-                  ^? _Just
-                  <<< to (unwrap >>> _.problems >>> length >>> (_ - 1))
-            setState $ _ { sheetIndex = state.sheetIndex - 1, problemIndex = problemIndex }
-        true -> setState $ _ { problemIndex = state.problemIndex - 1 }
+      count = length problems
 
-      proceed = case state.problemIndex < count - 1 of
-        false -> setState $ _ { sheetIndex = state.sheetIndex + 1, problemIndex = 0 }
-        true -> setState $ _ { problemIndex = state.problemIndex + 1 }
+      rewind = case 0 < state.problemIndex, 0 < state.sheetIndex of
+        false, false -> pure unit
+        false, true -> do
+          let
+            problemIndex =
+              fromMaybe 0
+                $ sheets
+                ^? ix (state.sheetIndex - 1)
+                <<< to (unwrap >>> _.problems >>> length >>> (_ - 1))
+          setState $ _ { sheetIndex = state.sheetIndex - 1, problemIndex = problemIndex }
+        true, _ -> setState $ _ { problemIndex = state.problemIndex - 1 }
+
+      proceed = case state.problemIndex < count - 1, state.sheetIndex < length sheets - 1 of
+        false, false -> pure unit
+        false, true -> setState $ _ { sheetIndex = state.sheetIndex + 1, problemIndex = 0 }
+        true, _ -> setState $ _ { problemIndex = state.problemIndex + 1 }
     shortcut <- useKeyboardShortcut
     useEffect (currentProblem /\ state.problemIndex) do
       shortcut.register "Backspace" rewind
       shortcut.register "Enter" proceed
       shortcut.register " " proceed
       pure $ pure unit
-    let
-      renderNumber n =
-        Value.render
-          { text: format fmt $ Int.toNumber n
-          , dense: true
-          , huge: true
-          , justify: Value.JustifyRight
-          }
     pure
       $ Container.render
           { flex: Container.Row
@@ -123,66 +105,46 @@ makeAlpha =
           , justify: Container.JustifyBetween
           , padding: true
           , fragment:
-              [ R.div
-                  { className: "flex-1"
-                  , children:
-                      pure
-                        $ Button.render
-                            { variant: Button.Primary
-                            , icon: "fa fa-angle-left"
-                            , bare: true
-                            , textLeft: true
-                            , fullWidth: true
-                            , fullHeight: true
-                            , onClick: rewind
-                            }
-                  }
-              , Scroller.render
-                  { shrink: false
-                  , someWidth: true
-                  , content:
-                      fragment
-                        [ Sl.card
-                            { className: "w-full"
-                            , children:
-                                [ R.div
-                                    { slot: "header"
-                                    , className: "text-center"
-                                    , children: [ R.text $ show (state.problemIndex + 1) <> " / " <> show count ]
-                                    }
-                                , R.div
-                                    { className: "w-full " <> font.current
-                                    , children:
-                                        pure
-                                          $ Container.render
-                                              { flex: Container.ColNoGap
-                                              , fullHeight: true
-                                              , fragment:
-                                                  [ fragment $ renderNumber <$> numbers
-                                                  , R.hr { className: "border border-divider-500" }
-                                                  , renderNumber $ foldl (+) 0 numbers
-                                                  ]
-                                              }
-                                    }
-                                ]
-                            }
-                        ]
-                  }
-              , R.div
-                  { className: "flex-1"
-                  , children:
-                      pure
-                        $ Button.render
-                            { variant: Button.Primary
-                            , icon: "fa fa-angle-right"
-                            , bare: true
-                            , textRight: true
-                            , fullWidth: true
-                            , fullHeight: true
-                            , onClick: proceed
-                            }
-                  }
-              ]
+              currentProblem
+                # maybe [] \problem ->
+                    [ R.div
+                        { className: "flex-1"
+                        , children:
+                            pure
+                              $ Button.render
+                                  { variant: Button.Primary
+                                  , icon: "fa fa-angle-left"
+                                  , bare: true
+                                  , textLeft: true
+                                  , fullWidth: true
+                                  , fullHeight: true
+                                  , onClick: rewind
+                                  }
+                        }
+                    , Scroller.render
+                        { shrink: false
+                        , someWidth: true
+                        , content:
+                            MitorizanPanel.render
+                              { problem
+                              , title: show (state.problemIndex + 1) <> " / " <> show count
+                              }
+                        }
+                    , R.div
+                        { className: "flex-1"
+                        , children:
+                            pure
+                              $ Button.render
+                                  { variant: Button.Primary
+                                  , icon: "fa fa-angle-right"
+                                  , bare: true
+                                  , textRight: true
+                                  , fullWidth: true
+                                  , fullHeight: true
+                                  , onClick: proceed
+                                  }
+                        }
+                    ]
           }
 
 type HeaderProps
@@ -191,7 +153,7 @@ type HeaderProps
     }
 
 renderHeader :: HeaderProps -> JSX
-renderHeader { state, setState } = do
+renderHeader { state } = do
   fromMaybe mempty do
     pack <- state.pack
     sheet <- (unwrap pack).sheets ^? ix state.sheetIndex
