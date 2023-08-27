@@ -3,6 +3,21 @@ module App.Data.Id where
 import AppPrelude
 import Data.Argonaut (class DecodeJson, class EncodeJson)
 
+newtype ActId
+  = ActId Int
+
+derive instance newtypeActId :: Newtype ActId _
+
+derive newtype instance eqActId :: Eq ActId
+
+derive newtype instance ordActId :: Ord ActId
+
+derive newtype instance showActId :: Show ActId
+
+derive newtype instance encodeJsonActId :: EncodeJson ActId
+
+derive newtype instance decodeJsonActId :: DecodeJson ActId
+
 newtype PackId
   = PackId Int
 

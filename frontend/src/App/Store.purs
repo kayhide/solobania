@@ -2,6 +2,7 @@ module App.Store where
 
 import AppPrelude
 import App.Data (class ToId)
+import App.Data.Act (Act, ActId)
 import App.Data.Spec (Spec, SpecId)
 import App.Data.Pack (Pack, PackId)
 import App.Data.User (User, UserId)
@@ -23,6 +24,7 @@ type StoreRow
   = ( users :: StoreUnit User UserId
     , specs :: StoreUnit Spec SpecId
     , packs :: StoreUnit Pack PackId
+    , acts :: StoreUnit Act ActId
     )
 
 type Store

@@ -8,6 +8,7 @@ import React.Basic.Hooks as React
 type KeyboardShortcut
   = { register :: String -> Effect Unit -> Effect Unit
     , unregister :: String -> Effect Unit
+    , reset :: Effect Unit
     }
 
 foreign import data UseKeyboardShortcut :: Type -> Type
@@ -33,5 +34,9 @@ useKeyboardShortcut =
       , unregister:
           \key -> do
             setTable (Map.delete key)
+            setGeneration (_ + 1)
+      , reset:
+          do
+            setTable $ const empty
             setGeneration (_ + 1)
       }

@@ -1,47 +1,52 @@
-module App.View.Agent.PacksAgent where
+module App.View.Agent.ActsAgent where
 
 import AppViewPrelude
-import App.Api.Packs (api)
+import App.Data.Id (ProblemId)
 import App.Api.Pagination as Pagination
+import App.Api.Acts (api)
 import App.Context (context)
-import App.Data.Pack (Pack, PackId, CreatingPack)
-import App.Data.Spec (SpecId)
-import App.View.Agent.Utils (useListApi, useShowApi, useCreateApi)
+import App.Data.Act (Act, ActId, CreatingAct, UpdatingAct)
+import App.View.Agent.Utils (useListApi, useShowApi, useCreateApi, useUpdateApi)
 import Data.Array as Array
 import React.Basic.Hooks as React
 
-type PacksAgent
-  = { items :: Array Pack
-    , item :: Maybe Pack
-    , createdItem :: Maybe Pack
-    , lookup :: PackId -> Maybe Pack
+type ActsAgent
+  = { items :: Array Act
+    , item :: Maybe Act
+    , createdItem :: Maybe Act
+    , lookup :: ActId -> Maybe Act
     , totalCount :: Maybe Int
     , isLoading :: Boolean
     , isPartiallyLoaded :: Boolean
     , isNextLoading :: Boolean
     , isSubmitting :: Boolean
-    , setSpecId :: SpecId -> Effect Unit
+    , setProblemId :: ProblemId -> Effect Unit
     , updateRange :: (Pagination.Range -> Pagination.Range) -> Effect Unit
     , load :: Effect Unit
+    , loadOne :: ActId -> Effect Unit
     , loadNext :: Effect Unit
-    , loadOne :: PackId -> Effect Unit
-    , fetch :: PackId -> Effect Unit
-    , create :: CreatingPack -> Effect Unit
+    , fetch :: ActId -> Effect Unit
+    , create :: CreatingAct -> Effect Unit
+    , update :: ActId /\ UpdatingAct -> Effect Unit
     }
 
-foreign import data UsePacksAgent :: Type -> Type
+foreign import data UseActsAgent :: Type -> Type
 
-usePacksAgent :: Hook UsePacksAgent PacksAgent
-usePacksAgent =
+useActsAgent :: Hook UseActsAgent ActsAgent
+useActsAgent =
   unsafeCoerceHook React.do
     ctx <- useContext context
     let
-      store = ctx.store.packs
-    ids /\ setIds <- useState ([] :: Array PackId)
+      store = ctx.store.acts
+    ids /\ setIds <- useState ([] :: Array ActId)
     totalCount /\ setTotalCount <- useState (Nothing :: Maybe Int)
-    listApi <- useListApi (Proxy :: _ Pack) (Proxy :: _ "packs") api.list
-    showApi <- useShowApi (Proxy :: _ Pack) (Proxy :: _ "packs") api.show
-    createApi <- useCreateApi (Proxy :: _ Pack) (Proxy :: _ "packs") api.create
+    listApi <- useListApi (Proxy :: _ Act) (Proxy :: _ "acts") api.list
+    showApi <- useShowApi (Proxy :: _ Act) (Proxy :: _ "acts") api.show
+    createApi <- useCreateApi (Proxy :: _ Act) (Proxy :: _ "acts") api.create
+    updateApi <- useUpdateApi (Proxy :: _ Act) (Proxy :: _ "acts") api.update
+    useEffect unit do
+      listApi.setScope unit
+      pure $ pure unit
     useEffect listApi.ids do
       setIds $ const listApi.ids
       pure $ pure unit
@@ -62,10 +67,9 @@ usePacksAgent =
       , isLoading: listApi.isLoading
       , isPartiallyLoaded: listApi.isPartiallyLoaded
       , isNextLoading: listApi.isNextLoading
-      , isSubmitting: createApi.isSubmitting
-      , setSpecId:
+      , isSubmitting: createApi.isSubmitting || updateApi.isSubmitting
+      , setProblemId:
           \id' -> do
-            listApi.setScope id'
             createApi.setScope id'
       , updateRange: listApi.updateRange
       , load: listApi.load
@@ -73,4 +77,5 @@ usePacksAgent =
       , loadOne: showApi.load
       , fetch: showApi.fetch
       , create: createApi.create
+      , update: updateApi.update
       }
