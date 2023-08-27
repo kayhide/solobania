@@ -15,4 +15,8 @@ class Pack < ApplicationRecord
       pack.sheets = spec[:sheets].to_a.map(&Sheet.method(:generate))
     end
   end
+
+  def display_name
+    name
+  end
 end

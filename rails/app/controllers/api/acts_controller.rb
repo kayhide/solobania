@@ -41,6 +41,11 @@ class Api::ActsController < ApplicationController
   def index_attributes item
     item.attributes
       .except(*%w(user_id))
+      .merge(
+        pack_id: item.actable.is_a?(Pack) ? item.actable_id : item.actable.try(:pack)&.id,
+        sheet_id: item.actable.is_a?(Sheet) ? item.actable_id : item.actable.try(:sheet)&.id,
+        problem_id: item.actable.is_a?(Problem) ? item.actable_id : item.actable.try(:problem)&.id,
+        display_name: item.actable.display_name)
   end
 
   def show_attributes item

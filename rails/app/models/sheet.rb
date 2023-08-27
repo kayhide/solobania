@@ -12,4 +12,8 @@ class Sheet < ApplicationRecord
       }
     end
   end
+
+  def display_name
+    "#{pack.display_name} #{name}"
+  end
 end

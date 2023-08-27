@@ -1,5 +1,6 @@
 class Problem < ApplicationRecord
   belongs_to :sheet
+  delegate :pack, to: :sheet
   has_many :acts, as: :actable, dependent: :destroy
 
   def self.generate spec
@@ -15,5 +16,9 @@ class Problem < ApplicationRecord
     top = 10 ** d - 1
     top = max ? [top, max].min : top
     r.rand(bottom...top) if bottom < top
+  end
+
+  def display_name
+    "#{sheet.display_name} #{order + 1}"
   end
 end

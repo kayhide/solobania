@@ -23,7 +23,11 @@ RSpec.describe Api::ActsController, type: :controller do
           id
           actable_type
           actable_id
+          pack_id
+          sheet_id
+          problem_id
           mark
+          display_name
           created_at
           updated_at
         )
@@ -43,7 +47,11 @@ RSpec.describe Api::ActsController, type: :controller do
           id
           actable_type
           actable_id
+          pack_id
+          sheet_id
+          problem_id
           mark
+          display_name
           created_at
           updated_at
         )
