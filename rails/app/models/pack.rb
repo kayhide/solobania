@@ -1,6 +1,7 @@
 class Pack < ApplicationRecord
   belongs_to :spec
   has_many :sheets, dependent: :destroy
+  has_many :acts, as: :actable, dependent: :destroy
 
   CATEGORIES = %w(shuzan anzan)
   enum category: CATEGORIES.map { |x| [x, x] }.to_h

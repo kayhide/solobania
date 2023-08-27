@@ -1,5 +1,6 @@
 class Problem < ApplicationRecord
   belongs_to :sheet
+  has_many :acts, as: :actable, dependent: :destroy
 
   def self.generate spec
     spec = spec.symbolize_keys

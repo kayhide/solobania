@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_25_164656) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_27_140457) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "acts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "actable_type"
+    t.bigint "actable_id"
+    t.string "mark"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["actable_type", "actable_id"], name: "index_acts_on_actable"
+    t.index ["user_id"], name: "index_acts_on_user_id"
+  end
 
   create_table "packs", force: :cascade do |t|
     t.string "category", null: false
@@ -64,6 +75,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_25_164656) do
     t.index ["email"], name: "index_users_on_email"
   end
 
+  add_foreign_key "acts", "users"
   add_foreign_key "packs", "specs"
   add_foreign_key "problems", "sheets"
   add_foreign_key "sheets", "packs"

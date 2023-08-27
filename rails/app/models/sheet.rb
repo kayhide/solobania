@@ -1,6 +1,7 @@
 class Sheet < ApplicationRecord
   belongs_to :pack
   has_many :problems, dependent: :destroy
+  has_many :acts, as: :actable, dependent: :destroy
 
   def self.generate spec
     spec = spec.symbolize_keys
