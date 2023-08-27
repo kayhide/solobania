@@ -1,0 +1,507 @@
+anzan-01:
+  category: anzan
+  grade: 1
+  grade_unit: kyu
+  name: "暗算 第1級"
+  sheets:
+    - name: "掛暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+        - { factors: [2, 3] }
+    - name: "割暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+        - { divisor: 3, quatient: 2 }
+    - name: "見取暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+        - { positive: 3, count: 5 }
+anzan-02:
+  category: anzan
+  grade: 2
+  grade_unit: kyu
+  name: "暗算 第2級"
+  sheets:
+    - name: "掛暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+    - name: "割暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+    - name: "見取暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 2, count: 12 }
+        - { positive: 2, negative: 2, count: 12 }
+        - { positive: 2, count: 12 }
+        - { positive: 2, negative: 2, count: 12 }
+        - { positive: 2, count: 12 }
+        - { positive: 2, negative: 2, count: 12 }
+        - { positive: 2, count: 12 }
+        - { positive: 2, negative: 2, count: 12 }
+        - { positive: 2, count: 12 }
+        - { positive: 2, count: 12 }
+anzan-03:
+  category: anzan
+  grade: 3
+  grade_unit: kyu
+  name: "暗算 第3級"
+  sheets:
+    - name: "掛暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+    - name: "割暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+    - name: "見取暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, count: 8 }
+anzan-04:
+  category: anzan
+  grade: 4
+  grade_unit: kyu
+  name: "暗算 第4級"
+  sheets:
+    - name: "掛暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+    - name: "割暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+    - name: "見取暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 2, count: 6 }
+        - { positive: 2, negative: 2, count: 6 }
+        - { positive: 2, count: 6 }
+        - { positive: 2, negative: 2, count: 6 }
+        - { positive: 2, count: 6 }
+        - { positive: 2, negative: 2, count: 6 }
+        - { positive: 2, count: 6 }
+        - { positive: 2, negative: 2, count: 6 }
+        - { positive: 2, count: 6 }
+        - { positive: 2, count: 6 }
+anzan-05:
+  category: anzan
+  grade: 5
+  grade_unit: kyu
+  name: "暗算 第5級"
+  sheets:
+    - name: "掛暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+    - name: "割暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+    - name: "見取暗算"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 2, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 2, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 2, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 2, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, count: 5 }
+anzan-06:
+  category: anzan
+  grade: 6
+  grade_unit: kyu
+  name: "暗算 第6級"
+  sheets:
+    - &anzan-06-mitorizan
+      name: "見取暗算A"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+        - { positive: 2, count: 4 }
+    - <<: *anzan-06-mitorizan
+      name: "見取暗算B"
+    - <<: *anzan-06-mitorizan
+      name: "見取暗算C"
+anzan-07:
+  category: anzan
+  grade: 7
+  grade_unit: kyu
+  name: "暗算 第7級"
+  sheets:
+    - &anzan-07-mitorizan
+      name: "見取暗算A"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+        - { positive: 2, count: 3 }
+    - <<: *anzan-07-mitorizan
+      name: "見取暗算B"
+    - <<: *anzan-07-mitorizan
+      name: "見取暗算C"
+anzan-08:
+  category: anzan
+  grade: 8
+  grade_unit: kyu
+  name: "暗算 第8級"
+  sheets:
+    - name: "見取暗算A"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+        - { positive: 1, count: 5 }
+    - &anzan-08-mitorizan
+      name: "見取暗算B"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+        - { positive: [1, 2], count: 3 }
+    - <<: *anzan-08-mitorizan
+      name: "見取暗算C"
+anzan-09:
+  category: anzan
+  grade: 9
+  grade_unit: kyu
+  name: "暗算 第9級"
+  sheets:
+    - &anzan-09-mitorizan
+      name: "見取暗算A"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+        - { positive: 1, count: 4 }
+    - <<: *anzan-09-mitorizan
+      name: "見取暗算B"
+    - <<: *anzan-09-mitorizan
+      name: "見取暗算C"
+anzan-10:
+  category: anzan
+  grade: 10
+  grade_unit: kyu
+  name: "暗算 第10級"
+  sheets:
+    - &anzan-10-mitorizan
+      name: "見取暗算A"
+      timelimit: 3
+      problem_type: mitorizan
+      problems: 
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+        - { positive: 1, count: 3 }
+    - <<: *anzan-10-mitorizan
+      name: "見取暗算B"
+    - <<: *anzan-10-mitorizan
+      name: "見取暗算C"
