@@ -38,6 +38,15 @@ RSpec.describe MitorizanProblem, type: :model do
       expect(max).to be_between(10, 99)
     end
 
+    it "takes digits" do
+      spec =  { positive: [4, 6], count: 200 }
+      problem = MitorizanProblem.generate spec
+
+      min, max = problem.body["question"].minmax
+      expect(min).to be_between(1_000, 9_999)
+      expect(max).to be_between(100_000, 999_999)
+    end
+
     it "takes digits for both of positives and negatives" do
       spec =  { positive: [1, 2], negative: [1, 2], count: 200 }
       problem = MitorizanProblem.generate spec

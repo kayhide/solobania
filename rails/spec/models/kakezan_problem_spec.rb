@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe KakezanProblem, type: :model do
   describe ".generate" do
     it "generates KakezanProblem" do
-      spec =  { numbers: [2, 1] }
+      spec =  { factors: [2, 1] }
       problem = KakezanProblem.generate spec
     
       expect(problem.class).to eq KakezanProblem
@@ -12,7 +12,7 @@ RSpec.describe KakezanProblem, type: :model do
     end
 
     it "fills body" do
-      spec =  { numbers: [2, 1] }
+      spec =  { factors: [2, 1] }
       problem = KakezanProblem.generate spec
     
       expect(problem.body.keys).to match_array %w(question answer)
@@ -21,7 +21,7 @@ RSpec.describe KakezanProblem, type: :model do
     end
 
     it "takes digit ranges" do
-      spec =  { numbers: [[2, 3], [1, 2]] }
+      spec =  { factors: [[2, 3], [1, 2]] }
       100.times do
         problem = KakezanProblem.generate spec
         question = problem.body["question"]
@@ -31,7 +31,7 @@ RSpec.describe KakezanProblem, type: :model do
     end
 
     it "never introduce neutral number" do
-      spec =  { numbers: [1, 1] }
+      spec =  { factors: [1, 1] }
       100.times do
         problem = KakezanProblem.generate spec
         question = problem.body["question"]

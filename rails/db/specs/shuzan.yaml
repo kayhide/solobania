@@ -1,0 +1,527 @@
+shuzan-01:
+  category: shuzan
+  grade: 1
+  grade_unit: kyu
+  name: "珠算 第1級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+        - { factors: [5, 4] }
+    - name: "割算"
+      timelimit: 7
+      problem_type: warizan
+      problems: 
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+        - { divisor: 4, quatient: 4 }
+    - name: "見取算"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: [4, 6], count: 10 }
+        - { positive: [4, 6], negative: [4, 6], count: 10 }
+        - { positive: [4, 6], count: 10 }
+        - { positive: [4, 6], negative: [4, 6], count: 10 }
+        - { positive: [4, 6], count: 10 }
+        - { positive: [4, 6], negative: [4, 6], count: 10 }
+        - { positive: [4, 6], count: 10 }
+        - { positive: [4, 6], negative: [4, 6], count: 10 }
+        - { positive: [4, 6], count: 10 }
+        - { positive: [4, 6], count: 10 }
+shuzan-02:
+  category: shuzan
+  grade: 2
+  grade_unit: kyu
+  name: "珠算 第2級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+        - { factors: [4, 4] }
+    - name: "割算"
+      timelimit: 7
+      problem_type: warizan
+      problems: 
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+        - { divisor: 3, quatient: 4 }
+    - name: "見取算"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: [4, 5], count: 10 }
+        - { positive: [4, 5], negative: [4, 5], count: 10 }
+        - { positive: [4, 5], count: 10 }
+        - { positive: [4, 5], negative: [4, 5], count: 10 }
+        - { positive: [4, 5], count: 10 }
+        - { positive: [4, 5], negative: [4, 5], count: 10 }
+        - { positive: [4, 5], count: 10 }
+        - { positive: [4, 5], negative: [4, 5], count: 10 }
+        - { positive: [4, 5], count: 10 }
+        - { positive: [4, 5], count: 10 }
+shuzan-03:
+  category: shuzan
+  grade: 3
+  grade_unit: kyu
+  name: "珠算 第3級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+    - name: "割算"
+      timelimit: 7
+      problem_type: warizan
+      problems: 
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+        - { divisor: 3, quatient: 3 }
+    - name: "見取算"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: [3, 5], count: 10 }
+        - { positive: [3, 5], negative: [3, 5], count: 10 }
+        - { positive: [3, 5], count: 10 }
+        - { positive: [3, 5], negative: [3, 5], count: 10 }
+        - { positive: [3, 5], count: 10 }
+        - { positive: [3, 5], negative: [3, 5], count: 10 }
+        - { positive: [3, 5], count: 10 }
+        - { positive: [3, 5], negative: [3, 5], count: 10 }
+        - { positive: [3, 5], count: 10 }
+        - { positive: [3, 5], count: 10 }
+shuzan-04:
+  category: shuzan
+  grade: 4
+  grade_unit: kyu
+  name: "珠算 第4級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+        - { factors: [4, 3] }
+    - name: "割算"
+      timelimit: 7
+      problem_type: warizan
+      problems: 
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+        - { divisor: 2, quatient: 3 }
+    - name: "見取算"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: [3, 4], count: 10 }
+        - { positive: [3, 4], negative: [3, 4], count: 10 }
+        - { positive: [3, 4], count: 10 }
+        - { positive: [3, 4], negative: [3, 4], count: 10 }
+        - { positive: [3, 4], count: 10 }
+        - { positive: [3, 4], negative: [3, 4], count: 10 }
+        - { positive: [3, 4], count: 10 }
+        - { positive: [3, 4], negative: [3, 4], count: 10 }
+        - { positive: [3, 4], count: 10 }
+        - { positive: [3, 4], count: 10 }
+shuzan-05:
+  category: shuzan
+  grade: 5
+  grade_unit: kyu
+  name: "珠算 第5級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+        - { factors: [3, 3] }
+    - name: "割算"
+      timelimit: 7
+      problem_type: warizan
+      problems: 
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+        - { divisor: 2, quatient: 2 }
+    - name: "見取算"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: [2, 4], count: 10 }
+        - { positive: [2, 4], negative: [2, 4], count: 10 }
+        - { positive: [2, 4], count: 10 }
+        - { positive: [2, 4], negative: [2, 4], count: 10 }
+        - { positive: [2, 4], count: 10 }
+        - { positive: [2, 4], negative: [2, 4], count: 10 }
+        - { positive: [2, 4], count: 10 }
+        - { positive: [2, 4], negative: [2, 4], count: 10 }
+        - { positive: [2, 4], count: 10 }
+        - { positive: [2, 4], count: 10 }
+shuzan-06:
+  category: shuzan
+  grade: 6
+  grade_unit: kyu
+  name: "珠算 第6級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+        - { factors: [3, 2] }
+    - name: "割算"
+      timelimit: 7
+      problem_type: warizan
+      problems: 
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+        - { divisor: 1, quatient: 3 }
+    - name: "見取算"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: [2, 3], count: 10 }
+        - { positive: [2, 3], negative: [2, 3], count: 10 }
+        - { positive: [2, 3], count: 10 }
+        - { positive: [2, 3], negative: [2, 3], count: 10 }
+        - { positive: [2, 3], count: 10 }
+        - { positive: [2, 3], negative: [2, 3], count: 10 }
+        - { positive: [2, 3], count: 10 }
+        - { positive: [2, 3], negative: [2, 3], count: 10 }
+        - { positive: [2, 3], count: 10 }
+        - { positive: [2, 3], count: 10 }
+shuzan-07:
+  category: shuzan
+  grade: 7
+  grade_unit: kyu
+  name: "珠算 第7級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+        - { factors: [2, 2] }
+    - name: "割算"
+      timelimit: 7
+      problem_type: warizan
+      problems: 
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+        - { divisor: 1, quatient: 2 }
+    - name: "見取算"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: 2, count: 10 }
+        - { positive: 2, negative: 2, count: 10 }
+        - { positive: 2, count: 10 }
+        - { positive: 2, negative: 2, count: 10 }
+        - { positive: 2, count: 10 }
+        - { positive: 2, negative: 2, count: 10 }
+        - { positive: 2, count: 10 }
+        - { positive: 2, negative: 2, count: 10 }
+        - { positive: 2, count: 10 }
+        - { positive: 2, count: 10 }
+shuzan-08:
+  category: shuzan
+  grade: 8
+  grade_unit: kyu
+  name: "珠算 第8級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+        - { factors: [3, 1] }
+    - &shuzan-08-mitorizan
+      name: "見取算A"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, negative: 2, count: 8 }
+        - { positive: 2, count: 8 }
+        - { positive: 2, count: 8 }
+    - <<: *shuzan-08-mitorizan
+      name: "見取算B"
+shuzan-09:
+  category: shuzan
+  grade: 9
+  grade_unit: kyu
+  name: "珠算 第9級"
+  sheets:
+    - name: "掛算"
+      timelimit: 7
+      problem_type: kakezan
+      problems: 
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+        - { factors: [2, 1] }
+    - &shuzan-09-mitorizan
+      name: "見取算A"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], negative: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+        - { positive: [1, 2], count: 8 }
+    - <<: *shuzan-09-mitorizan
+      name: "見取算B"
+shuzan-10:
+  category: shuzan
+  grade: 10
+  grade_unit: kyu
+  name: "珠算 第10級"
+  sheets:
+    - name: "見取算A"
+      timelimit: 7
+      problem_type: mitorizan
+      problems: 
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, negative: 1, count: 7 }
+        - { positive: 1, count: 7 }
+        - { positive: 1, count: 7 }
+    - &shuzan-10-mitorizan
+      name: "見取算B"
+      timelimit: 7
+      problem_type: mitorizan
+      problems:
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, negative: 1, count: 5 }
+        - { positive: 2, count: 5 }
+        - { positive: 2, count: 5 }
+    - <<: *shuzan-10-mitorizan
+      name: "見取算C"

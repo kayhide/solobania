@@ -2,22 +2,14 @@ class MitorizanProblem < Problem
   def self.generate spec
     spec = spec.symbolize_keys
     pos0, pos1 = spec[:positive]
-    pos1 ||= pos0
-    pos0 &&= 10 ** (pos0 - 1)
-    pos1 &&= 10 ** pos1
     neg0, neg1 = spec[:negative]
-    neg1 ||= neg0
-    neg0 &&= 10 ** (neg0 - 1)
-    neg1 &&= 10 ** neg1
     r = Random.new
     question, answer = spec[:count].times.inject([[], 0]) do |acc, _|
       ns, sum = acc
-      n =
-        if neg0 && neg0 < sum && r.rand(2) == 1
-          - r.rand(neg0...[neg1, sum].min)
-        else
-          r.rand(pos0...pos1)
-        end
+      n = neg0 && r.rand(2) == 1 && self.rand_digit_number(r, neg0, neg1, max: sum)&.-@
+      if !n || sum + n < 0
+        n = self.rand_digit_number(r, pos0, pos1)
+      end
       [[*ns, n], sum + n]
     end
     new(count: spec[:count], body: { question:, answer: }, spec: spec)
