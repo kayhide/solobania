@@ -9,7 +9,9 @@ import App.View.Agent.PacksAgent (usePacksAgent)
 import App.View.Agent.SpecsAgent (useSpecsAgent)
 import App.View.Atom.Button as Button
 import App.View.Atom.Container as Container
+import App.View.Atom.Scroller as Scroller
 import App.View.Organism.HeaderMenu as HeaderMenu
+import App.View.Organism.HistoryPanel as HistoryPanel
 import App.View.Skeleton.Single as Single
 import React.Basic.DOM as R
 import React.Basic.Hooks as React
@@ -42,19 +44,34 @@ make = do
 makeAlpha :: Component ChildProps
 makeAlpha =
   component "Alpha" \_ -> React.do
-    specs <- useSpecsAgent
-    useEffect unit do
-      specs.load
-      pure $ pure unit
     pure
-      $ Container.render
-          { flex: Container.RowWrapping
-          , position: Container.Fill
-          , loading: specs.isLoading
-          , fragment:
-              renderSpec
-                <$> specs.items
+      $ Scroller.render
+          { grow: true
+          , fullHeight: true
+          , content:
+              fragment
+                [ renderSpecsPanel {}
+                , HistoryPanel.render {}
+                ]
           }
+
+renderSpecsPanel :: {} -> JSX
+renderSpecsPanel =
+  unsafePerformEffect
+    $ component "SpecsPanel" \_ -> React.do
+        specs <- useSpecsAgent
+        useEffect unit do
+          specs.load
+          pure $ pure unit
+        pure
+          $ Container.render
+              { flex: Container.RowWrapping
+              , fullWidth: true
+              , loading: specs.isLoading
+              , fragment:
+                  renderSpec
+                    <$> specs.items
+              }
 
 renderSpec :: Spec -> JSX
 renderSpec =

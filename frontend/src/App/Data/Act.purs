@@ -80,6 +80,10 @@ newtype Act
   = Act
   { id :: ActId
   , actable_id :: ActableId
+  , display_name :: String
+  , pack_id :: Maybe PackId
+  , sheet_id :: Maybe SheetId
+  , problem_id :: Maybe ProblemId
   , mark :: Maybe Mark
   , created_at :: DateTime
   , updated_at :: DateTime
