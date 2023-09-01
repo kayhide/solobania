@@ -67,10 +67,11 @@ make =
           { flex: Container.ColDense
           , padding: true
           , fullWidth: true
+          , loading: acts.isLoading
           , fragment:
-              Array.take 5 $ renderAct
-                <$> do
-                    packId /\ v <- Map.toUnfoldable items
+              renderAct
+                <$> Array.take 5 do
+                    packId /\ v <- Array.reverse $ Map.toUnfoldable items
                     maybe [] (pure <<< (_ /\ v)) packId
           }
 
