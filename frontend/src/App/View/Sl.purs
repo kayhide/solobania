@@ -13,3 +13,5 @@ foreign import input :: forall r. { | r } -> JSX
 foreign import option :: forall r. { | r } -> JSX
 
 foreign import select :: forall r. { | r } -> JSX
+
+foreign import format_date :: forall r. { | r } -> JSX

@@ -40,6 +40,7 @@ data Justify
   | JustifyCenter
   | JustifyEnd
   | JustifyBetween
+  | JustifyStretch
 
 data Translate
   = TranslateXFull
@@ -174,6 +175,7 @@ render props = do
             JustifyCenter -> "justify-center"
             JustifyEnd -> "justify-end"
             JustifyBetween -> "justify-between"
+            JustifyStretch -> "justify-items-stretch"
 
     translateClass =
       fromMaybe ""
