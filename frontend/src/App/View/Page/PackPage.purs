@@ -38,155 +38,154 @@ type ChildProps
 emptifyState :: State -> State
 emptifyState = _ { pack = Nothing, sheetIndex = 0, problemIndex = 0 }
 
-make :: Component Props
-make = do
-  skeleton <- Single.make
-  header <- HeaderMenu.make
-  alpha <- makeAlpha
-  component "PackPage" \{ packId } -> React.do
-    packs <- usePacksAgent
-    state /\ setState <-
-      useState
-        { pack: Nothing
-        , sheetIndex: 0
-        , problemIndex: 0
-        , starting: false
-        , finishing: false
-        }
-    useEffect packId do
-      packs.loadOne packId
-      pure $ pure unit
-    useEffect packs.item do
-      setState $ _ { pack = packs.item }
-      pure $ pure unit
-    useEffect packId do
-      setState $ _ { starting = true, finishing = false }
-      pure $ pure unit
-    pure
-      $ skeleton
-          { layout: Single.Wide
-          , header:
-              fragment
-                [ header {}
-                , renderHeader { state, setState }
-                ]
-          , alpha: alpha { state, setState }
+render :: Props -> JSX
+render =
+  renderComponent do
+    component "PackPage" \{ packId } -> React.do
+      packs <- usePacksAgent
+      state /\ setState <-
+        useState
+          { pack: Nothing
+          , sheetIndex: 0
+          , problemIndex: 0
+          , starting: false
+          , finishing: false
           }
+      useEffect packId do
+        packs.loadOne packId
+        pure $ pure unit
+      useEffect packs.item do
+        setState $ _ { pack = packs.item }
+        pure $ pure unit
+      useEffect packId do
+        setState $ _ { starting = true, finishing = false }
+        pure $ pure unit
+      pure
+        $ Single.render
+            { layout: Single.Wide
+            , header:
+                fragment
+                  [ HeaderMenu.render {}
+                  , renderHeader { state, setState }
+                  ]
+            , alpha: alpha { state, setState }
+            }
 
-makeAlpha :: Component ChildProps
-makeAlpha =
-  component "Alpha" \{ state, setState } -> React.do
-    acts <- useActsAgent
-    let
-      sheets = state.pack ^. _Just <<< to (unwrap >>> _.sheets)
+alpha :: ChildProps -> JSX
+alpha =
+  renderComponent do
+    component "Alpha" \{ state, setState } -> React.do
+      acts <- useActsAgent
+      let
+        sheets = state.pack ^. _Just <<< to (unwrap >>> _.sheets)
 
-      currentSheet = sheets ^? ix state.sheetIndex
+        currentSheet = sheets ^? ix state.sheetIndex
 
-      problems = currentSheet ^. _Just <<< to (unwrap >>> _.problems)
+        problems = currentSheet ^. _Just <<< to (unwrap >>> _.problems)
 
-      currentProblem = problems ^? ix state.problemIndex <* guard (not state.starting && not state.finishing)
+        currentProblem = problems ^? ix state.problemIndex <* guard (not state.starting && not state.finishing)
 
-      count = length problems
-    useEffect currentProblem do
-      for_ currentProblem \problem -> do
-        acts.setProblemId $ toId problem
-        acts.create $ wrap unit
-      pure $ pure unit
-    let
-      rewind = case 0 < state.problemIndex, 0 < state.sheetIndex of
-        false, false -> pure unit
-        false, true -> do
-          let
-            problemIndex =
-              fromMaybe 0
-                $ sheets
-                ^? ix (state.sheetIndex - 1)
-                <<< to (unwrap >>> _.problems >>> length >>> (_ - 1))
-          setState $ _ { sheetIndex = state.sheetIndex - 1, problemIndex = problemIndex }
-        true, _ -> setState $ _ { problemIndex = state.problemIndex - 1 }
+        count = length problems
+      useEffect currentProblem do
+        for_ currentProblem \problem -> do
+          acts.setProblemId $ toId problem
+          acts.create $ wrap unit
+        pure $ pure unit
+      let
+        rewind = case 0 < state.problemIndex, 0 < state.sheetIndex of
+          false, false -> pure unit
+          false, true -> do
+            let
+              problemIndex =
+                fromMaybe 0
+                  $ sheets
+                  ^? ix (state.sheetIndex - 1)
+                  <<< to (unwrap >>> _.problems >>> length >>> (_ - 1))
+            setState $ _ { sheetIndex = state.sheetIndex - 1, problemIndex = problemIndex }
+          true, _ -> setState $ _ { problemIndex = state.problemIndex - 1 }
 
-      proceed = do
-        for_ acts.createdItem \act -> do
-          acts.update $ updating act { mark: Just Confident }
-        case state.problemIndex < count - 1, state.sheetIndex < length sheets - 1 of
-          false, false -> setState $ _ { finishing = true }
-          false, true -> setState $ _ { sheetIndex = state.sheetIndex + 1, problemIndex = 0 }
-          true, _ -> setState $ _ { problemIndex = state.problemIndex + 1 }
-    shortcut <- useKeyboardShortcut
-    useEffect (toId <$> currentProblem) do
-      case currentProblem of
-        Nothing -> shortcut.reset
-        Just _ -> do
-          shortcut.register "Backspace" rewind
-          shortcut.register "Enter" proceed
-          shortcut.register " " proceed
-      pure $ pure unit
-    pure
-      $ Container.render
-          { flex: Container.Row
-          , position: Container.Fill
-          , justify: Container.JustifyBetween
-          , padding: true
-          , content:
-              case state.starting, state.finishing of
-                true, _ ->
-                  Button.render
-                    { text: "Start"
-                    , size: Button.Large
-                    , fullWidth: true
-                    , loading: acts.isSubmitting
-                    , onClick: setState $ _ { starting = false }
-                    }
-                false, true ->
-                  Button.render
-                    { text: "Finish"
-                    , size: Button.Large
-                    , fullWidth: true
-                    , loading: acts.isSubmitting
-                    , onClick: navigate Route.Home
-                    }
-                _, _ ->
-                  fragment
-                    $ currentProblem
-                    # maybe [] \problem ->
-                        [ R.div
-                            { className: "flex-1"
-                            , children:
-                                pure
-                                  $ Button.render
-                                      { variant: Button.Primary
-                                      , icon: "fa fa-angle-left"
-                                      , bare: true
-                                      , textLeft: true
-                                      , fullWidth: true
-                                      , fullHeight: true
-                                      , onClick: rewind
-                                      }
-                            }
-                        , Container.render
-                            { someWidth: true
-                            , content:
-                                ProblemPanel.render
-                                  { problem
-                                  , title: show (state.problemIndex + 1) <> " / " <> show count
-                                  }
-                            }
-                        , R.div
-                            { className: "flex-1"
-                            , children:
-                                pure
-                                  $ Button.render
-                                      { variant: Button.Primary
-                                      , icon: "fa fa-angle-right"
-                                      , bare: true
-                                      , textRight: true
-                                      , fullWidth: true
-                                      , fullHeight: true
-                                      , onClick: proceed
-                                      }
-                            }
-                        ]
-          }
+        proceed = do
+          for_ acts.createdItem \act -> do
+            acts.update $ updating act { mark: Just Confident }
+          case state.problemIndex < count - 1, state.sheetIndex < length sheets - 1 of
+            false, false -> setState $ _ { finishing = true }
+            false, true -> setState $ _ { sheetIndex = state.sheetIndex + 1, problemIndex = 0 }
+            true, _ -> setState $ _ { problemIndex = state.problemIndex + 1 }
+      shortcut <- useKeyboardShortcut
+      useEffect (toId <$> currentProblem) do
+        case currentProblem of
+          Nothing -> shortcut.reset
+          Just _ -> do
+            shortcut.register "Backspace" rewind
+            shortcut.register "Enter" proceed
+            shortcut.register " " proceed
+        pure $ pure unit
+      pure
+        $ Container.render
+            { flex: Container.Row
+            , position: Container.Fill
+            , justify: Container.JustifyBetween
+            , padding: true
+            , content:
+                case state.starting, state.finishing of
+                  true, _ ->
+                    Button.render
+                      { text: "Start"
+                      , size: Button.Large
+                      , fullWidth: true
+                      , loading: acts.isSubmitting
+                      , onClick: setState $ _ { starting = false }
+                      }
+                  false, true ->
+                    Button.render
+                      { text: "Finish"
+                      , size: Button.Large
+                      , fullWidth: true
+                      , loading: acts.isSubmitting
+                      , onClick: navigate Route.Home
+                      }
+                  _, _ ->
+                    fragment
+                      $ currentProblem
+                      # maybe [] \problem ->
+                          [ R.div
+                              { className: "flex-1"
+                              , children:
+                                  pure
+                                    $ Button.render
+                                        { variant: Button.Primary
+                                        , icon: "fa fa-angle-left"
+                                        , bare: true
+                                        , textLeft: true
+                                        , fullWidth: true
+                                        , fullHeight: true
+                                        , onClick: rewind
+                                        }
+                              }
+                          , Container.render
+                              { someWidth: true
+                              , content:
+                                  ProblemPanel.render
+                                    { problem
+                                    , title: show (state.problemIndex + 1) <> " / " <> show count
+                                    }
+                              }
+                          , R.div
+                              { className: "flex-1"
+                              , children:
+                                  pure
+                                    $ Button.render
+                                        { variant: Button.Primary
+                                        , icon: "fa fa-angle-right"
+                                        , bare: true
+                                        , textRight: true
+                                        , fullWidth: true
+                                        , fullHeight: true
+                                        , onClick: proceed
+                                        }
+                              }
+                          ]
+            }
 
 type HeaderProps
   = { state :: State

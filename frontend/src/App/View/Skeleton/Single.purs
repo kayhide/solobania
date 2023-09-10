@@ -26,43 +26,43 @@ type PropsRowOptional
 type Props
   = { | PropsRow }
 
-make ::
+render ::
   forall props props'.
   Row.Lacks "children" props =>
   Row.Lacks "key" props =>
   Row.Lacks "ref" props =>
   Row.Union props PropsRowOptional props' =>
   Row.Nub props' PropsRow =>
-  Component (Record props)
-make = do
-  notificationList <- NotificationList.make
-  component "Single" \props -> React.do
-    let
-      def = { className: "", omega: mempty, header: mempty, footer: mempty } :: { | PropsRowOptional }
+  Record props -> JSX
+render =
+  renderComponent do
+    component "Single" \props -> React.do
+      let
+        def = { className: "", omega: mempty, header: mempty, footer: mempty } :: { | PropsRowOptional }
 
-      { alpha, layout, className, omega, header, footer } = Record.merge props def :: Props
+        { alpha, layout, className, omega, header, footer } = Record.merge props def :: Props
 
-      width = case layout of
-        Narrow -> "w-full max-w-md"
-        Wide -> "w-full max-w-6xl"
-    pure
-      $ R.div
-          { className:
-              "flex flex-col w-full h-full bg-background-primary"
-                <> mmap (append " ") className
-          , children:
-              [ header
-              , R.div
-                  { className: "relative flex-grow overflow-y-hidden flex flex-row justify-center"
-                  , children:
-                      [ R.div
-                          { className: "relative h-full " <> width
-                          , children: pure alpha
-                          }
-                      , omega
-                      ]
-                  }
-              , footer
-              , notificationList {}
-              ]
-          }
+        width = case layout of
+          Narrow -> "w-full max-w-md"
+          Wide -> "w-full max-w-6xl"
+      pure
+        $ R.div
+            { className:
+                "flex flex-col w-full h-full bg-background-primary"
+                  <> mmap (append " ") className
+            , children:
+                [ header
+                , R.div
+                    { className: "relative flex-grow overflow-y-hidden flex flex-row justify-center"
+                    , children:
+                        [ R.div
+                            { className: "relative h-full " <> width
+                            , children: pure alpha
+                            }
+                        , omega
+                        ]
+                    }
+                , footer
+                , NotificationList.render {}
+                ]
+            }

@@ -15,86 +15,86 @@ import React.Basic.Hooks as React
 type Props
   = {}
 
-make :: Component Props
-make = do
-  dropdown <- Dropdown.make
-  component "HeaderMenu" \_ -> React.do
-    { route, currentProfile } <- useContext context
-    pure
-      $ R.nav
-          { className: "px-6 flex items-center bg-white border-b border-divider"
-          , children:
-              [ MenuItem.render
-                  { dst: Route.Home
-                  , text: "Solobania"
-                  , bold: true
-                  , luminous: true
-                  }
-              , currentProfile
-                  # maybe mempty \{ user } ->
-                      fragment
-                        [ Container.render
-                            { flex: Container.Row
-                            , align: Container.AlignCenter
-                            , fullHeight: true
-                            , fragment:
-                                [ MenuItem.render
-                                    { dst: Route.Mitorizan
-                                    , active: route == Route.Mitorizan
-                                    , bold: true
-                                    , text: "Mitorizan"
-                                    }
-                                ]
-                            }
-                        , R.div
-                            { className: "flex-grow"
-                            }
-                        , FontPicker.render {}
-                        , Container.render
-                            { flex: Container.Row
-                            , align: Container.AlignCenter
-                            , fullHeight: true
-                            , fragment:
-                                [ Monoid.guard (unwrap user).admin
-                                    MenuItem.render
-                                    { dst: Route.Home
-                                    , active: false
-                                    , small: true
-                                    , text: "Admin"
-                                    }
-                                , dropdown
-                                    { className: "self-stretch flex"
-                                    , align: Dropdown.AlignRight
-                                    , trigger:
-                                        \handle ->
-                                          MenuItem.render
-                                            { onClick: handle
-                                            , bold: false
-                                            , small: true
-                                            , icon: "fas fa-cog"
-                                            , color: MenuItem.Secondary
+render :: Props -> JSX
+render =
+  renderComponent do
+    component "HeaderMenu" \_ -> React.do
+      { route, currentProfile } <- useContext context
+      pure
+        $ R.nav
+            { className: "px-6 flex items-center bg-white border-b border-divider"
+            , children:
+                [ MenuItem.render
+                    { dst: Route.Home
+                    , text: "Solobania"
+                    , bold: true
+                    , luminous: true
+                    }
+                , currentProfile
+                    # maybe mempty \{ user } ->
+                        fragment
+                          [ Container.render
+                              { flex: Container.Row
+                              , align: Container.AlignCenter
+                              , fullHeight: true
+                              , fragment:
+                                  [ MenuItem.render
+                                      { dst: Route.Mitorizan
+                                      , active: route == Route.Mitorizan
+                                      , bold: true
+                                      , text: "Mitorizan"
+                                      }
+                                  ]
+                              }
+                          , R.div
+                              { className: "flex-grow"
+                              }
+                          , FontPicker.render {}
+                          , Container.render
+                              { flex: Container.Row
+                              , align: Container.AlignCenter
+                              , fullHeight: true
+                              , fragment:
+                                  [ Monoid.guard (unwrap user).admin
+                                      MenuItem.render
+                                      { dst: Route.Home
+                                      , active: false
+                                      , small: true
+                                      , text: "Admin"
+                                      }
+                                  , Dropdown.render
+                                      { className: "self-stretch flex"
+                                      , align: Dropdown.AlignRight
+                                      , trigger:
+                                          \handle ->
+                                            MenuItem.render
+                                              { onClick: handle
+                                              , bold: false
+                                              , small: true
+                                              , icon: "fas fa-cog"
+                                              , color: MenuItem.Secondary
+                                              }
+                                      , content:
+                                          R.div
+                                            { className: "w-48 bg-white shadow-md rounded-md overflow-hidden"
+                                            , children:
+                                                [ MenuItem.render
+                                                    { text: (unwrap user).username
+                                                    , tall: true
+                                                    , color: MenuItem.Secondary
+                                                    , preIcon: "fas fa-user"
+                                                    }
+                                                , MenuItem.render
+                                                    { dst: Route.Logout
+                                                    , tall: true
+                                                    , color: MenuItem.Secondary
+                                                    , text: Ja.logout
+                                                    }
+                                                ]
                                             }
-                                    , content:
-                                        R.div
-                                          { className: "w-48 bg-white shadow-md rounded-md overflow-hidden"
-                                          , children:
-                                              [ MenuItem.render
-                                                  { text: (unwrap user).username
-                                                  , tall: true
-                                                  , color: MenuItem.Secondary
-                                                  , preIcon: "fas fa-user"
-                                                  }
-                                              , MenuItem.render
-                                                  { dst: Route.Logout
-                                                  , tall: true
-                                                  , color: MenuItem.Secondary
-                                                  , text: Ja.logout
-                                                  }
-                                              ]
-                                          }
-                                    }
-                                ]
-                            }
-                        ]
-              ]
-          }
+                                      }
+                                  ]
+                              }
+                          ]
+                ]
+            }

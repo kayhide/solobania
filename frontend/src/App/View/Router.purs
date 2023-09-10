@@ -21,11 +21,6 @@ import Routing.Hash (matchesWith)
 
 make :: Env -> Component {}
 make env = do
-  homePage <- HomePage.make
-  loginPage <- LoginPage.make
-  mitorizanPage <- MitorizanPage.make
-  shuzanPage <- ShuzanPage.make
-  packPage <- PackPage.make
   component "Router" \_ -> React.do
     route /\ setRoute <- useState Route.Home
     notifier <- useNotificationAgent
@@ -37,7 +32,7 @@ make env = do
       currentProfile = { user: _ } <$> sessions.user
 
       authorize content = case currentProfile of
-        Nothing -> loginPage { sessions }
+        Nothing -> LoginPage.render { sessions }
         Just _ -> content
     useEffect unit do
       matchesWith (parse routeCodec) \_src dst -> do
@@ -57,10 +52,10 @@ make env = do
       # bool mempty do
           provider context { env, notifier, route, currentProfile, store, font }
             [ case route of
-                Route.Home -> authorize $ homePage {}
+                Route.Home -> authorize $ HomePage.render {}
                 Route.Login -> authorize $ mempty
                 Route.Logout -> mempty
-                Route.Mitorizan -> authorize $ mitorizanPage {}
-                Route.Shuzan key -> authorize $ shuzanPage { key }
-                Route.Pack packId -> authorize $ packPage { packId }
+                Route.Mitorizan -> authorize $ MitorizanPage.render {}
+                Route.Shuzan key -> authorize $ ShuzanPage.render { key }
+                Route.Pack packId -> authorize $ PackPage.render { packId }
             ]

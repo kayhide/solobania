@@ -8,6 +8,7 @@ module AppViewPrelude
   , isEmptyJSX
   , zeroWidthSpace
   , unemptify
+  , renderComponent
   ) where
 
 import AppPrelude
@@ -39,3 +40,7 @@ zeroWidthSpace = maybe "" CodePoints.singleton $ toEnum 0x200B -- zero width spa
 -- | Otherwise return the argument as is.
 unemptify :: String -> String
 unemptify = bool identity (const zeroWidthSpace) =<< String.null
+
+-- | Use this function for the purpose of instantiation of React components.
+renderComponent :: forall a. Component a -> a -> JSX
+renderComponent = unsafePerformEffect

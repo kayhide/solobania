@@ -29,50 +29,51 @@ type PropsRowOptional
 type Props
   = { | PropsRow }
 
-make ::
+def :: { | PropsRowOptional }
+def =
+  { className: mempty
+  , trigger: const mempty
+  , align: AlignLeft
+  , open: false
+  }
+
+render ::
   forall props props'.
   Row.Lacks "key" props =>
   Row.Lacks "children" props =>
   Row.Lacks "ref" props =>
   Row.Union props PropsRowOptional props' =>
   Row.Nub props' PropsRow =>
-  Component { | props }
-make = do
-  let
-    def =
-      { className: mempty
-      , trigger: const mempty
-      , align: AlignLeft
-      , open: false
-      } ::
-        { | PropsRowOptional }
-  component "Dropdown" \props -> React.do
-    let
-      { className, trigger, content, align, open } = Record.merge props def :: Props
-    open /\ setOpen <- useState false
-    closing /\ setClosing <- useState false
-    -- If it did not regain a focus in a same event handling cycle,
-    -- the focus actually went somewhere out of the component.
-    useAff closing do
-      when closing do
-        delay $ Milliseconds 0.0
-        liftEffect do
-          setOpen $ const $ false
-    pure
-      $ R.div
-          { className:
-              "relative"
-                <> mmap (append " ") className
-          , onBlur: handler_ $ setClosing $ const true
-          , onFocus: handler_ $ setClosing $ const false
-          , children:
-              [ trigger $ setOpen not
-              , R.div
-                  { className:
-                      "absolute z-20 bottom-0 transform translate-y-full transition-visibility duration-200"
-                        <> (bool " invisible opacity-0" "" open)
-                        <> (bool "" " right-0" (align == AlignRight))
-                  , children: pure content
-                  }
-              ]
-          }
+  { | props } -> JSX
+render =
+  renderComponent do
+    component "Dropdown" \props -> React.do
+      let
+        { className, trigger, content, align, open } = Record.merge props def :: Props
+      open /\ setOpen <- useState false
+      closing /\ setClosing <- useState false
+      -- If it did not regain a focus in a same event handling cycle,
+      -- the focus actually went somewhere out of the component.
+      useAff closing do
+        when closing do
+          delay $ Milliseconds 0.0
+          liftEffect do
+            setOpen $ const $ false
+      pure
+        $ R.div
+            { className:
+                "relative"
+                  <> mmap (append " ") className
+            , onBlur: handler_ $ setClosing $ const true
+            , onFocus: handler_ $ setClosing $ const false
+            , children:
+                [ trigger $ setOpen not
+                , R.div
+                    { className:
+                        "absolute z-20 bottom-0 transform translate-y-full transition-visibility duration-200"
+                          <> (bool " invisible opacity-0" "" open)
+                          <> (bool "" " right-0" (align == AlignRight))
+                    , children: pure content
+                    }
+                ]
+            }

@@ -45,69 +45,6 @@ renderToken text =
     , justify: Value.JustifyRight
     }
 
-make ::
-  forall props props'.
-  Row.Lacks "key" props =>
-  Row.Lacks "children" props =>
-  Row.Lacks "ref" props =>
-  Row.Union props PropsRowOptional props' =>
-  Row.Nub props' PropsRow =>
-  Component { | props }
-make = do
-  component "MitrozanPanel" \props -> React.do
-    { font } <- useContext context
-    let
-      { problem
-      , title
-      } = Record.merge props def :: Props
-    let
-      { subject, body } = unwrap problem
-
-      { question, answer } = unwrap body
-
-      renderBody = case subject of
-        Mitorizan ->
-          Container.render
-            { flex: Container.ColNoGap
-            , fullHeight: true
-            , fragment:
-                [ fragment $ renderNumber <$> question
-                , R.hr { className: "border border-divider-500" }
-                , renderNumber answer
-                ]
-            }
-        Kakezan ->
-          Container.render
-            { flex: Container.RowDense
-            , fullHeight: true
-            , fragment:
-                intercalate [ renderToken "×" ] (pure <<< renderNumber <$> question)
-                  <> [ renderToken "=", renderNumber answer ]
-            }
-        Warizan ->
-          Container.render
-            { flex: Container.RowDense
-            , fullHeight: true
-            , fragment:
-                intercalate [ renderToken "÷" ] (pure <<< renderNumber <$> question)
-                  <> [ renderToken "=", renderNumber answer ]
-            }
-    pure
-      $ Sl.card
-          { className: "w-full"
-          , children:
-              [ R.div
-                  { slot: "header"
-                  , className: "text-center"
-                  , children: [ R.text title ]
-                  }
-              , R.div
-                  { className: "w-full " <> font.current
-                  , children: pure $ renderBody
-                  }
-              ]
-          }
-
 render ::
   forall props props'.
   Row.Lacks "key" props =>
@@ -116,4 +53,58 @@ render ::
   Row.Union props PropsRowOptional props' =>
   Row.Nub props' PropsRow =>
   { | props } -> JSX
-render = unsafePerformEffect make
+render =
+  renderComponent do
+    component "MitrozanPanel" \props -> React.do
+      { font } <- useContext context
+      let
+        { problem
+        , title
+        } = Record.merge props def :: Props
+      let
+        { subject, body } = unwrap problem
+
+        { question, answer } = unwrap body
+
+        renderBody = case subject of
+          Mitorizan ->
+            Container.render
+              { flex: Container.ColNoGap
+              , fullHeight: true
+              , fragment:
+                  [ fragment $ renderNumber <$> question
+                  , R.hr { className: "border border-divider-500" }
+                  , renderNumber answer
+                  ]
+              }
+          Kakezan ->
+            Container.render
+              { flex: Container.RowDense
+              , fullHeight: true
+              , fragment:
+                  intercalate [ renderToken "×" ] (pure <<< renderNumber <$> question)
+                    <> [ renderToken "=", renderNumber answer ]
+              }
+          Warizan ->
+            Container.render
+              { flex: Container.RowDense
+              , fullHeight: true
+              , fragment:
+                  intercalate [ renderToken "÷" ] (pure <<< renderNumber <$> question)
+                    <> [ renderToken "=", renderNumber answer ]
+              }
+      pure
+        $ Sl.card
+            { className: "w-full"
+            , children:
+                [ R.div
+                    { slot: "header"
+                    , className: "text-center"
+                    , children: [ R.text title ]
+                    }
+                , R.div
+                    { className: "w-full " <> font.current
+                    , children: pure $ renderBody
+                    }
+                ]
+            }

@@ -27,33 +27,32 @@ type ChildProps
     , setState :: (State -> State) -> Effect Unit
     }
 
-make :: Component Props
-make = do
-  skeleton <- Single.make
-  header <- HeaderMenu.make
-  alpha <- makeAlpha
-  component "HomePage" \_ -> React.do
-    state /\ setState <- useState {}
-    pure
-      $ skeleton
-          { layout: Single.Wide
-          , header: header {}
-          , alpha: alpha { state, setState }
-          }
+render :: Props -> JSX
+render =
+  renderComponent do
+    component "HomePage" \_ -> React.do
+      state /\ setState <- useState {}
+      pure
+        $ Single.render
+            { layout: Single.Wide
+            , header: HeaderMenu.render {}
+            , alpha: alpha { state, setState }
+            }
 
-makeAlpha :: Component ChildProps
-makeAlpha =
-  component "Alpha" \_ -> React.do
-    pure
-      $ Scroller.render
-          { grow: true
-          , fullHeight: true
-          , content:
-              fragment
-                [ renderSpecsPanel {}
-                , HistoryPanel.render {}
-                ]
-          }
+alpha :: ChildProps -> JSX
+alpha =
+  renderComponent do
+    component "Alpha" \_ -> React.do
+      pure
+        $ Scroller.render
+            { grow: true
+            , fullHeight: true
+            , content:
+                fragment
+                  [ renderSpecsPanel {}
+                  , HistoryPanel.render {}
+                  ]
+            }
 
 renderSpecsPanel :: {} -> JSX
 renderSpecsPanel =
