@@ -69,13 +69,47 @@ RSpec.describe Api::ActsController, type: :controller do
   describe "POST #create" do
     let(:problem) { create :problem }
 
-    it "creates a new Act" do
+    it "creates new Acts for problem, sheet and pack" do
+      expect {
+        post :create, params: { problem_id: problem.id }
+      }.to change(Act, :count).by(3)
+      acts = Act.last(3)
+      expect(acts.map(&:user)).to all eq current_user
+      expect(acts.map(&:actable)).to eq [problem, problem.sheet, problem.pack]
+    end
+
+    it "sets the timestamps for all created Acts" do
+      post :create, params: { problem_id: problem.id }
+      acts = Act.last(3)
+      expect(acts.map(&:created_at).uniq).to eq [acts.last.created_at]
+      expect(acts.map(&:updated_at).uniq).to eq [acts.last.created_at]
+    end
+
+    it "updates pack act if existing" do
+      travel_to 1.hour.ago do
+        @pack_act = create :act, user: current_user, actable: problem.pack
+      end
+      expect {
+        post :create, params: { problem_id: problem.id }
+      }.to change(Act, :count).by(2)
+      acts = Act.last(3)
+      expect(acts.map(&:created_at).uniq).to eq [@pack_act, acts.last].map(&:created_at)
+      expect(acts.map(&:updated_at).uniq).to eq [acts.last.created_at]
+    end
+
+    it "updates sheet act and pack act if existing" do
+      travel_to 2.hour.ago do
+        @pack_act = create :act, user: current_user, actable: problem.pack
+      end
+      travel_to 1.hour.ago do
+        @sheet_act = create :act, user: current_user, actable: problem.sheet
+      end
       expect {
         post :create, params: { problem_id: problem.id }
       }.to change(Act, :count).by(1)
-      act = Act.last
-      expect(act.user).to eq current_user
-      expect(act.actable).to eq problem
+      acts = Act.last(3)
+      expect(acts.map(&:created_at).uniq).to eq [@pack_act, @sheet_act, acts.last].map(&:created_at)
+      expect(acts.map(&:updated_at).uniq).to eq [acts.last.created_at]
     end
   end
 
