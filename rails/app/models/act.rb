@@ -17,6 +17,14 @@ class Act < ApplicationRecord
           parent_actable.acts.first || parent_actable.acts.build(user: user)
         end
       end
+  end
+
+  def ensure_parent!
+    if parent
+      parent.created_at = [parent.created_at, created_at].compact.min
+      parent.updated_at = [parent.updated_at, updated_at].compact.max
+      parent.save!
+      parent.ensure_parent!
     end
   end
 end

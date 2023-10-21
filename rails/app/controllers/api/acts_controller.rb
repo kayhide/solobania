@@ -14,21 +14,7 @@ class Api::ActsController < ApplicationController
 
   def create
     @act = Act.create!(user: current_user, actable: @problem, **act_params)
-    sheet_act = Act.find_or_initialize_by(
-      user: current_user,
-      actable: @problem.sheet,
-    )
-    sheet_act.created_at ||= @act.created_at
-    sheet_act.updated_at = @act.created_at
-    sheet_act.save!
-
-    pack_act = Act.find_or_initialize_by(
-      user: current_user,
-      actable: @problem.sheet.pack,
-    )
-    pack_act.created_at ||= @act.created_at
-    pack_act.updated_at = @act.created_at
-    pack_act.save!
+    @act.ensure_parent!
 
     render json: show_attributes(@act), status: :created
   end
