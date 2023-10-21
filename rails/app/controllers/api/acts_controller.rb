@@ -4,7 +4,7 @@ class Api::ActsController < ApplicationController
   before_action :set_act, only: %i(show update)
 
   def index
-    @acts = current_user.acts.order(created_at: :desc)
+    @acts = current_user.acts.order(created_at: :desc).limit(200)
     render json: @acts.map(&method(:index_attributes))
   end
 

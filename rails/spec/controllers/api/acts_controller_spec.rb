@@ -32,6 +32,14 @@ RSpec.describe Api::ActsController, type: :controller do
           updated_at
         )
     end
+
+    it "limits items up to 200" do
+      create_list(:act, 205, user: current_user, actable: problem)
+      get :index
+      expect(response).to be_successful
+      body = JSON.parse(response.body)
+      expect(body.count).to eq 200
+    end
   end
 
   describe "GET #show" do
