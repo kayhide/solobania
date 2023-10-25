@@ -10,14 +10,12 @@ RSpec.describe Api::ActsController, type: :controller do
 
     it "returns a success response" do
       acts = [
-        create_list(:act, 2, user: current_user, actable: problem),
-        create_list(:act, 1, user: current_user, actable: problem.sheet),
-        create_list(:act, 1, user: current_user, actable: problem.sheet.pack),
+        create_list(:act, 2, user: current_user, actable: problem.pack),
       ]
       get :index
       expect(response).to be_successful
       body = JSON.parse(response.body)
-      expect(body.count).to eq 4
+      expect(body.count).to eq 2
       expect(body.map(&:keys))
         .to all match_array %w(
           id
@@ -33,12 +31,23 @@ RSpec.describe Api::ActsController, type: :controller do
         )
     end
 
-    it "limits items up to 200" do
-      create_list(:act, 205, user: current_user, actable: problem)
+    it "ignores problem and sheet acts" do
+      acts = [
+        create_list(:act, 2, user: current_user, actable: problem),
+        create_list(:act, 2, user: current_user, actable: problem.sheet),
+      ]
       get :index
       expect(response).to be_successful
       body = JSON.parse(response.body)
-      expect(body.count).to eq 200
+      expect(body.count).to eq 0
+    end
+
+    it "limits items up to 20" do
+      create_list(:act, 21, user: current_user, actable: problem.pack)
+      get :index
+      expect(response).to be_successful
+      body = JSON.parse(response.body)
+      expect(body.count).to eq 20
     end
   end
 
