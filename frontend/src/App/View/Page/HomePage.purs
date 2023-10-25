@@ -44,14 +44,19 @@ alpha =
   renderComponent do
     component "Alpha" \_ -> React.do
       pure
-        $ Scroller.render
-            { grow: true
+        $ Container.render
+            { flex: Container.Col
             , fullHeight: true
-            , content:
-                fragment
-                  [ renderSpecsPanel {}
-                  , HistoryPanel.render {}
-                  ]
+            , fragment:
+                [ renderSpecsPanel {}
+                , Scroller.render
+                    { grow: true
+                    , content:
+                        fragment
+                          [ HistoryPanel.render {}
+                          ]
+                    }
+                ]
             }
 
 renderSpecsPanel :: {} -> JSX
