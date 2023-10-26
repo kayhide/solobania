@@ -5,6 +5,9 @@ Rails.application.routes.draw do
       resources :packs, only: %i(index show create)
     end
     resources :acts, only: %i(index show update)
+    resources :packs, only: %i() do
+      resources :acts, only: %i(index)
+    end
     resources :problems, only: %i() do
       resources :acts, only: %i(create)
     end

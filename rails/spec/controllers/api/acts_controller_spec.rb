@@ -49,6 +49,21 @@ RSpec.describe Api::ActsController, type: :controller do
       body = JSON.parse(response.body)
       expect(body.count).to eq 20
     end
+
+    context "with pack_id" do
+      it "lists sheet acts" do
+        pack = create :pack
+        acts = create_list(:sheet, 3, pack: pack).map do |sheet|
+          create :act, user: current_user, actable: sheet
+        end
+        get :index, params: { pack_id: pack.id}
+        expect(response).to be_successful
+        body = JSON.parse(response.body)
+        expect(body.count).to eq 3
+        expect(body.map { |x| x["actable_type"] }).to all eq "Sheet"
+        expect(body.map { |x| x["actable_id"] }).to eq pack.sheet_ids.reverse
+      end
+    end
   end
 
   describe "GET #show" do

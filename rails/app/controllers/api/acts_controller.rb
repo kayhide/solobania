@@ -1,15 +1,18 @@
 class Api::ActsController < ApplicationController
   before_action :authenticate!
   before_action :set_problem, only: %i(create)
+  before_action :set_pack, only: %i(index)
   before_action :set_act, only: %i(show update)
 
   def index
-    @acts =
-      current_user
-      .acts
-      .where(actable_type: "Pack")
-      .order(created_at: :desc)
-      .limit(20)
+    @acts = current_user.acts
+    if @pack
+      @acts = @acts.where(actable: @pack.sheets)
+    else
+      @acts = @acts.where(actable_type: "Pack")
+    end
+
+    @acts = @acts.order(created_at: :desc).limit(20)
     render json: @acts.map(&method(:index_attributes))
   end
 
@@ -35,6 +38,10 @@ class Api::ActsController < ApplicationController
 
   def set_problem
     @problem = Problem.includes(sheet: :pack).find(params[:problem_id])
+  end
+
+  def set_pack
+    @pack = Pack.includes(:sheets).find_by(id: params[:pack_id])
   end
 
   def set_act
