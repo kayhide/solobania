@@ -13,6 +13,7 @@ data Endpoint
   | Spec SpecId
   | SpecPacks SpecId
   | Pack PackId
+  | PackActs PackId
   | Acts
   | Act ActId
   | ProblemActs ProblemId
@@ -34,6 +35,7 @@ endpointCodec =
         , "Spec": "specs" / (_id :: RouteDuplex' SpecId)
         , "SpecPacks": "specs" / (_id :: RouteDuplex' SpecId) / "packs"
         , "Pack": "packs" / (_id :: RouteDuplex' PackId)
+        , "PackActs": "packs" / (_id :: RouteDuplex' PackId) / "acts"
         , "Acts": "acts" / noArgs
         , "Act": "acts" / (_id :: RouteDuplex' ActId)
         , "ProblemActs": "problems" / (_id :: RouteDuplex' ProblemId) / "acts"

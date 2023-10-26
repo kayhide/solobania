@@ -12,6 +12,7 @@ newtype Sheet
   , pack_id :: PackId
   , name :: String
   , problems :: Array Problem
+  , timelimit :: Int
   , created_at :: DateTime
   , updated_at :: DateTime
   }

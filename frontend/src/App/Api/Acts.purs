@@ -5,23 +5,23 @@ import App.Api.Endpoint as Endpoint
 import App.Api.Pagination (Paginated)
 import App.Api.Pagination as Pagination
 import App.Api.Request (BaseUrl, RequestMethod(..), RespErr, makeAuthReq, makeAuthReqPaginated)
-import App.Data.Id (ProblemId)
+import App.Data.Id (PackId, ProblemId)
 import App.Data.Act (Act, ActId, CreatingAct, UpdatingAct)
 
 api ::
   forall m r.
   MonadAff m =>
   MonadAsk { baseUrl :: BaseUrl | r } m =>
-  { list :: Unit -> Maybe Pagination.Range -> m (Either RespErr (Paginated (Array Act)))
+  { list :: Maybe PackId -> Maybe Pagination.Range -> m (Either RespErr (Paginated (Array Act)))
   , show :: ActId -> m (Either RespErr Act)
   , create :: ProblemId -> CreatingAct -> m (Either RespErr Act)
   , update :: ActId -> UpdatingAct -> m (Either RespErr Act)
   }
 api =
   { list:
-      \_ range ->
+      \packId range ->
         makeAuthReqPaginated
-          { endpoint: Endpoint.Acts
+          { endpoint: maybe Endpoint.Acts Endpoint.PackActs packId
           , method: Get
           , range
           }
