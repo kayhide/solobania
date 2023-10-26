@@ -21,6 +21,7 @@ import Data.Ord.Min (Min(..))
 import Data.String as String
 import Data.Time.Duration (Seconds)
 import Prim.Row as Row
+import React.Basic.DOM as R
 import React.Basic.Hooks as React
 
 type PropsRow :: forall k. Row k
@@ -122,33 +123,49 @@ renderAct =
                               , Value.render
                                   { text:
                                       formatTimeRange (toTimeRange act)
-                                        # bool identity (_ <> (" / " <> show timelimit)) (0 < timelimit)
+                                        # bool identity (_ <> (" / " <> show timelimit <> ":00")) (0 < timelimit)
                                   }
                               ]
                           }
                       , Container.render
-                          { flex: Container.Row
-                          , content:
-                              Container.render
-                                { flex: Container.Row
-                                , align: Container.AlignBaseline
-                                , justify: Container.JustifyStretch
-                                , fragment:
-                                    renderSheetActs <<< (identity &&& (\sheet -> sheetTimeRanges ^? ix (toId sheet))) <$> sheets
-                                }
+                          { flex: Container.ColNoGap
+                          , fragment:
+                              [ Container.render
+                                  { flex: Container.RowDense
+                                  , fragment:
+                                      renderTimeRange 1800 <$> (\sheet -> sheetTimeRanges ^? ix (toId sheet)) <$> sheets
+                                  }
+                              , Container.render
+                                  { flex: Container.RowDense
+                                  , fragment:
+                                      renderTimelimit 1800 <$> sheets
+                                  }
+                              ]
                           }
                       ]
                   }
             }
 
-renderSheetActs :: Sheet /\ Maybe TimeRange -> JSX
-renderSheetActs =
+renderTimeRange :: Int -> Maybe TimeRange -> JSX
+renderTimeRange max =
   renderComponent do
-    component "SheetActs" \(sheet /\ range) -> React.do
+    component "TimeRange" \range -> React.do
       let
-        { name, timelimit } = unwrap sheet
+        dt = Int.round $ maybe 0.0 unwrap $ diffSeconds <$> range
       pure
-        $ fragment
-            [ Value.render { text: name }
-            , Value.render { text: maybe "" formatTimeRange range <> " / " <> show timelimit }
-            ]
+        $ R.span
+            { className: "h-2 bg-cyan-500 border border-cyan-200 rounded"
+            , style: R.css { width: show (dt * 100 / max) <> "%" }
+            }
+
+renderTimelimit :: Int -> Sheet -> JSX
+renderTimelimit max =
+  renderComponent do
+    component "Timelimit" \sheet -> React.do
+      let
+        { timelimit } = unwrap sheet
+      pure
+        $ R.span
+            { className: "h-2 bg-green-500 border border-green-200 rounded"
+            , style: R.css { width: show (timelimit * 60 * 100 / max) <> "%" }
+            }
