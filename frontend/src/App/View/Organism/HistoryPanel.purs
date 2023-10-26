@@ -99,9 +99,6 @@ renderAct =
       sheets <-
         useMemo packs.item \_ ->
           maybe [] (unwrap >>> _.sheets) packs.item
-      timelimit <-
-        useMemo sheets \_ ->
-          foldl (+) 0 $ (unwrap >>> _.timelimit) <$> sheets
       sheetTimeRanges <-
         useMemo acts.items \_ ->
           Map.fromFoldableWith append
@@ -120,11 +117,7 @@ renderAct =
                           , fragment:
                               [ Sl.format_date { lang: "ja", date: printDateTime $ coerce created_at }
                               , Value.render { text: display_name }
-                              , Value.render
-                                  { text:
-                                      formatTimeRange (toTimeRange act)
-                                        # bool identity (_ <> (" / " <> show timelimit <> ":00")) (0 < timelimit)
-                                  }
+                              , Value.render { text: formatTimeRange (toTimeRange act) }
                               ]
                           }
                       , Container.render
@@ -133,12 +126,19 @@ renderAct =
                               [ Container.render
                                   { flex: Container.RowDense
                                   , fragment:
-                                      renderTimeRange 1800 <$> (\sheet -> sheetTimeRanges ^? ix (toId sheet)) <$> sheets
+                                      case sheets of
+                                        [] -> [ renderFiller ]
+                                        _ ->
+                                          renderTimeRange 1800
+                                            <$> (\sheet -> sheetTimeRanges ^? ix (toId sheet))
+                                            <$> sheets
                                   }
                               , Container.render
                                   { flex: Container.RowDense
                                   , fragment:
-                                      renderTimelimit 1800 <$> sheets
+                                      case sheets of
+                                        [] -> [ renderFiller ]
+                                        _ -> renderTimelimit 1800 <$> sheets
                                   }
                               ]
                           }
@@ -146,26 +146,28 @@ renderAct =
                   }
             }
 
+renderFiller :: JSX
+renderFiller =
+  R.span
+    { className: "h-2 w-0 border border-transparent"
+    }
+
 renderTimeRange :: Int -> Maybe TimeRange -> JSX
-renderTimeRange max =
-  renderComponent do
-    component "TimeRange" \range -> React.do
-      let
-        dt = Int.round $ maybe 0.0 unwrap $ diffSeconds <$> range
-      pure
-        $ R.span
-            { className: "h-2 bg-cyan-500 border border-cyan-200 rounded"
-            , style: R.css { width: show (dt * 100 / max) <> "%" }
-            }
+renderTimeRange max range = do
+  let
+    dt = Int.round $ maybe 0.0 unwrap $ diffSeconds <$> range
+  R.span
+    { className: "h-2 bg-cyan-500 border border-cyan-200 rounded"
+    , style: R.css { width: show (dt * 100 / max) <> "%" }
+    , title: maybe "" formatTimeRange range
+    }
 
 renderTimelimit :: Int -> Sheet -> JSX
-renderTimelimit max =
-  renderComponent do
-    component "Timelimit" \sheet -> React.do
-      let
-        { timelimit } = unwrap sheet
-      pure
-        $ R.span
-            { className: "h-2 bg-green-500 border border-green-200 rounded"
-            , style: R.css { width: show (timelimit * 60 * 100 / max) <> "%" }
-            }
+renderTimelimit max sheet = do
+  let
+    { timelimit } = unwrap sheet
+  R.span
+    { className: "h-2 bg-green-500 border border-green-200 rounded"
+    , style: R.css { width: show (timelimit * 60 * 100 / max) <> "%" }
+    , title: show timelimit <> ":00"
+    }
