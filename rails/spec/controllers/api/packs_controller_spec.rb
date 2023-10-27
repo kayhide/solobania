@@ -20,6 +20,7 @@ RSpec.describe Api::PacksController, type: :controller do
           name
           grade
           grade_unit
+          spec_key
           created_at
           updated_at
         )
@@ -50,6 +51,7 @@ RSpec.describe Api::PacksController, type: :controller do
           name
           grade
           grade_unit
+          spec_key
           created_at
           updated_at
           sheets

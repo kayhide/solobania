@@ -30,7 +30,7 @@ class Api::PacksController < ApplicationController
   end
 
   def set_pack
-    @pack = Pack.includes(sheets: :problems).find(params[:id])
+    @pack = Pack.includes(:spec, sheets: :problems).find(params[:id])
   end
 
   def pack_params
@@ -38,7 +38,7 @@ class Api::PacksController < ApplicationController
   end
 
   def index_attributes item
-    item.attributes
+    item.attributes.merge(spec_key: item.spec.key)
   end
 
   def show_attributes item
@@ -51,6 +51,6 @@ class Api::PacksController < ApplicationController
       end
       sheet.attributes.merge(problems:)
     end
-    item.attributes.merge(sheets:)
+    item.attributes.merge(spec_key: item.spec.key, sheets:)
   end
 end
