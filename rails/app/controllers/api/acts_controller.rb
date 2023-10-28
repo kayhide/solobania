@@ -10,6 +10,9 @@ class Api::ActsController < ApplicationController
       @acts = @acts.where(actable: @pack.sheets)
     else
       @acts = @acts.where(actable_type: "Pack")
+      if spec_key = params[:spec_key]
+        @acts = @acts.joins(pack: :spec).where(packs: { specs: { key: spec_key } })
+      end
     end
 
     @acts = @acts.order(created_at: :desc).limit(20)

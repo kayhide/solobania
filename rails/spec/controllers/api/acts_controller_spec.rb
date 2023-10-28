@@ -9,9 +9,7 @@ RSpec.describe Api::ActsController, type: :controller do
     let(:problem) { create :problem }
 
     it "returns a success response" do
-      acts = [
-        create_list(:act, 2, user: current_user, actable: problem.pack),
-      ]
+      acts = create_list(:act, 2, user: current_user, actable: problem.pack)
       get :index
       expect(response).to be_successful
       body = JSON.parse(response.body)
@@ -48,6 +46,23 @@ RSpec.describe Api::ActsController, type: :controller do
       expect(response).to be_successful
       body = JSON.parse(response.body)
       expect(body.count).to eq 20
+    end
+
+    context "with spec_key" do
+      it "filters acts" do
+        pack = create :pack
+        acts = create_list(:act, 3, user: current_user, actable: pack)
+
+        create_list(:pack, 2).each do |p|
+          create_list(:act, 2, user: current_user, actable: p)
+        end
+        get :index, params: { spec_key: pack.spec.key}
+        expect(response).to be_successful
+        body = JSON.parse(response.body)
+        expect(body.count).to eq 3
+        expect(body.map { |x| x["actable_type"] }).to all eq "Pack"
+        expect(body.map { |x| x["actable_id"] }).to all eq pack.id
+      end
     end
 
     context "with pack_id" do

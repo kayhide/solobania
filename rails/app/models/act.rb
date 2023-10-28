@@ -1,6 +1,7 @@
 class Act < ApplicationRecord
   belongs_to :user
   belongs_to :actable, polymorphic: true
+  belongs_to :pack, -> { where(acts: { actable_type: 'Pack' }) }, foreign_key: 'actable_id', required: false
 
   MARKS = %w(confident hesitant uncertain)
   enum mark: MARKS.map { |x| [x, x] }.to_h
@@ -9,7 +10,7 @@ class Act < ApplicationRecord
     @parent ||=
       begin
         refl =
-          actable.class.reflect_on_all_associations(:belongs_to).find {|refl|
+          actable.class.reflect_on_all_associations(:belongs_to).find { |refl|
             refl.klass.reflect_on_association :acts
           }
         if refl
