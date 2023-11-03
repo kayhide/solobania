@@ -3,14 +3,15 @@ module App.View.Organism.HistoryPanel where
 import AppViewPrelude
 import App.Data (toId)
 import App.Data.Act (Act)
-import App.Data.DateTime (printDateTime)
+import App.Data.DateTime (printDate)
 import App.Data.Sheet (Sheet)
 import App.View.Agent.ActsAgent (useActsAgent)
 import App.View.Agent.PacksAgent (usePacksAgent)
 import App.View.Atom.Container as Container
 import App.View.Atom.Value as Value
 import App.View.Sl as Sl
-import Data.DateTime (DateTime)
+import Data.Array as Array
+import Data.DateTime (Date, DateTime, date)
 import Data.DateTime as DateTime
 import Data.Int as Int
 import Data.Lens.Index (ix)
@@ -56,14 +57,29 @@ render =
       useEffect unit do
         acts.load
         pure $ pure unit
+      dateActs <-
+        useMemo acts.items \_ ->
+          Map.fromFoldableWith (<>) ((toDate &&& pure) <$> acts.items)
       pure
         $ Container.render
-            { flex: Container.ColDense
+            { flex: Container.Col
             , padding: true
             , fullWidth: true
             , loading: acts.isLoading
-            , fragment: renderAct <$> acts.items
+            , fragment: renderActs <$> Array.reverse (Map.toUnfoldable dateActs)
             }
+
+toDate :: forall a r. Newtype a { created_at :: DateTime | r } => a -> Date
+toDate = date <<< _.created_at <<< unwrap
+
+renderActs :: (Date /\ Array Act) -> JSX
+renderActs (date /\ acts) =
+  Container.render
+    { fragment:
+        [ Sl.format_date { lang: "ja", date: printDate $ coerce date }
+        , fragment $ renderAct <$> acts
+        ]
+    }
 
 type TimeRange
   = Min DateTime /\ Max DateTime
@@ -87,7 +103,7 @@ renderAct =
   renderComponent do
     component "Act" \act -> React.do
       let
-        { pack_id, display_name, created_at } = unwrap act
+        { pack_id, display_name } = unwrap act
       acts <- useActsAgent
       packs <- usePacksAgent
       useEffect pack_id do
@@ -105,45 +121,43 @@ renderAct =
             $ filterMap (\act' -> ((_ /\ toTimeRange act') <$> (unwrap act').sheet_id)) acts.items
       pure
         $ Container.render
-            { flex: Container.ColNoGap
-            , content:
-                Container.render
-                  { flex: Container.ColNoGap
-                  , fragment:
-                      [ Container.render
-                          { flex: Container.Row
-                          , align: Container.AlignBaseline
-                          , justify: Container.JustifyStretch
-                          , fragment:
-                              [ Sl.format_date { lang: "ja", date: printDateTime $ coerce created_at }
-                              , Value.render { text: display_name }
-                              , Value.render { text: formatTimeRange (toTimeRange act) }
-                              ]
-                          }
-                      , Container.render
-                          { flex: Container.ColNoGap
-                          , fragment:
-                              [ Container.render
-                                  { flex: Container.RowDense
-                                  , fragment:
-                                      case sheets of
-                                        [] -> [ renderFiller ]
-                                        _ ->
-                                          renderTimeRange 1800
-                                            <$> (\sheet -> sheetTimeRanges ^? ix (toId sheet))
-                                            <$> sheets
-                                  }
-                              , Container.render
-                                  { flex: Container.RowDense
-                                  , fragment:
-                                      case sheets of
-                                        [] -> [ renderFiller ]
-                                        _ -> renderTimelimit 1800 <$> sheets
-                                  }
-                              ]
-                          }
-                      ]
-                  }
+            { flex: Container.RowNoGap
+            , align: Container.AlignCenter
+            , fragment:
+                [ Container.render
+                    { flex: Container.Row
+                    , align: Container.AlignBaseline
+                    , justify: Container.JustifyBetween
+                    , someWidth: true
+                    , fragment:
+                        [ Value.render { dense: true, text: display_name }
+                        , Value.render { dense: true, text: formatTimeRange (toTimeRange act) }
+                        ]
+                    }
+                , Container.render
+                    { flex: Container.ColNoGap
+                    , fullWidth: true
+                    , fragment:
+                        [ Container.render
+                            { flex: Container.RowDense
+                            , fragment:
+                                case sheets of
+                                  [] -> [ renderFiller ]
+                                  _ ->
+                                    renderTimeRange 1800
+                                      <$> (\sheet -> sheetTimeRanges ^? ix (toId sheet))
+                                      <$> sheets
+                            }
+                        , Container.render
+                            { flex: Container.RowDense
+                            , fragment:
+                                case sheets of
+                                  [] -> [ renderFiller ]
+                                  _ -> renderTimelimit 1800 <$> sheets
+                            }
+                        ]
+                    }
+                ]
             }
 
 renderFiller :: JSX
