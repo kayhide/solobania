@@ -91,8 +91,11 @@ diffSeconds :: TimeRange -> Seconds
 diffSeconds = uncurry DateTime.diff <<< (coerce *** coerce) <<< swap
 
 formatTimeRange :: TimeRange -> String
-formatTimeRange range =
-  (Int.round $ unwrap $ diffSeconds range)
+formatTimeRange = formatSeconds <<< diffSeconds
+
+formatSeconds :: Seconds -> String
+formatSeconds seconds =
+  Int.round (unwrap seconds)
     # do
         min <- show <$> (_ `div` 60)
         sec <- show <$> (_ `mod` 60)
@@ -115,9 +118,10 @@ renderAct =
       sheets <-
         useMemo packs.item \_ ->
           maybe [] (unwrap >>> _.sheets) packs.item
-      sheetTimeRanges <-
+      sheetDurations <-
         useMemo acts.items \_ ->
-          Map.fromFoldableWith append
+          map diffSeconds
+            $ Map.fromFoldableWith append
             $ filterMap (\act' -> ((_ /\ toTimeRange act') <$> (unwrap act').sheet_id)) acts.items
       pure
         $ Container.render
@@ -141,47 +145,62 @@ renderAct =
                         [ Container.render
                             { flex: Container.RowDense
                             , fragment:
-                                case sheets of
-                                  [] -> [ renderFiller ]
-                                  _ ->
-                                    renderTimeRange 1800
-                                      <$> (\sheet -> sheetTimeRanges ^? ix (toId sheet))
-                                      <$> sheets
+                                uncurry (renderDuration 1800)
+                                  <$> (\sheet -> sheet /\ (sheetDurations ^? ix (toId sheet)))
+                                  <$> sheets
                             }
                         , Container.render
                             { flex: Container.RowDense
                             , fragment:
-                                case sheets of
-                                  [] -> [ renderFiller ]
-                                  _ -> renderTimelimit 1800 <$> sheets
+                                renderTimelimit 1800 <$> sheets
                             }
                         ]
                     }
                 ]
             }
 
-renderFiller :: JSX
-renderFiller =
-  R.span
-    { className: "h-2 w-0 border border-transparent"
-    }
-
-renderTimeRange :: Int -> Maybe TimeRange -> JSX
-renderTimeRange max range = do
+renderDuration :: Int -> Sheet -> Maybe Seconds -> JSX
+renderDuration max sheet seconds = do
   let
-    dt = Int.round $ maybe 0.0 unwrap $ diffSeconds <$> range
-  R.span
-    { className: "h-2 bg-cyan-500 border border-cyan-200 rounded"
-    , style: R.css { width: show (dt * 100 / max) <> "%" }
-    , title: maybe "" formatTimeRange range
+    { timelimit } = unwrap sheet
+
+    dt = Int.round $ maybe 0.0 unwrap seconds
+  renderBar
+    { variation: bool InTime OverTime $ timelimit * 60 < dt
+    , value: dt * 100 / max
+    , text: maybe "" formatSeconds seconds
     }
 
 renderTimelimit :: Int -> Sheet -> JSX
 renderTimelimit max sheet = do
   let
     { timelimit } = unwrap sheet
+  renderBar
+    { variation: Neutral
+    , value: timelimit * 60 * 100 / max
+    , text: show timelimit <> ":00"
+    }
+
+data BarVariation
+  = Neutral
+  | InTime
+  | OverTime
+
+type BarArgs
+  = { variation :: BarVariation
+    , value :: Int
+    , text :: String
+    }
+
+renderBar :: BarArgs -> JSX
+renderBar { variation, value, text } = do
+  let
+    colorClass = case variation of
+      Neutral -> "bg-gray-500 border-gray-200"
+      InTime -> "bg-green-500 border-green-200"
+      OverTime -> "bg-red-500 border-red-200"
   R.span
-    { className: "h-2 bg-green-500 border border-green-200 rounded"
-    , style: R.css { width: show (timelimit * 60 * 100 / max) <> "%" }
-    , title: show timelimit <> ":00"
+    { className: "h-2 border rounded " <> colorClass
+    , style: R.css { width: show value <> "%" }
+    , title: text
     }
