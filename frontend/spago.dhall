@@ -42,6 +42,7 @@ to generate this file without the comments in this block.
   , "nullable"
   , "numbers"
   , "ordered-collections"
+  , "orders"
   , "precise-datetime"
   , "prelude"
   , "profunctor"
